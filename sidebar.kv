@@ -1,0 +1,45 @@
+
+<FlatButton>:
+  __width__: self.parent.width - 30
+  font_size: 22
+  padding: dp(20)
+
+
+<Sidebar>:
+  id: id_sidebar
+  size_hint_x: None
+  width: dp(350) 
+  md_bg_color: app.theme_cls.bg_dark
+  padding: 50
+  FitImage:
+    source: "img/logo.png"
+    size_hint: None,None
+    width: (self.parent.width - 200) 
+    height:self.width * 7/16
+    pos_hint:{"top":0.95,"center_x":0.5}
+  MDList:
+    pos_hint:{"top":.75,"center_x":0.5}
+    padding:15
+    spacing:30
+    FlatButton:
+      text: "FOURNISEUR"
+      on_release: print(self.size)
+    FlatButton:
+      text: "CHAUFFEUR"
+      on_release: print(self.size)
+    FlatButton:
+      text: "EQUIPE"
+      on_release: print(self.size)
+    FlatButton:
+      text: "VEHICULE"
+      on_release: print(self.size)
+    FlatButton:
+      text: "LIGNE"
+      on_release: print(self.size)
+    FlatButton:
+      text: "CART"
+      on_release: print(self.size)
+    FlatButton:
+      text: "FACTURE"
+      on_release: print(self.size)
+

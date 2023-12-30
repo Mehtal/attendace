@@ -1,0 +1,22 @@
+<SupplierCreateForm>:
+  id:id_create_form
+  spacing:50
+  elevation:999
+  pos_hint:{"center_x":0.5,"center_y":0.5}
+  orientation:"vertical"
+  adaptive_size:True
+  MDTextField:
+    id: id_nom
+    hint_text: "enter name"
+  MDTextField:
+    id: id_telephone
+    hint_text: "enter phone number"
+  MDTextField:
+    id: id_adresse
+    hint_text: "enter adresse"
+  MDRectangleFlatButton:
+    text: "Create Supplier"
+    on_release: root.create_supplier(id_nom.text,id_telephone.text,id_adresse.text)
+
+
+
