@@ -43,6 +43,12 @@
       MDIconButton:
         pos_hint:{"center_y":0.5}
         md_bg_color:"green"
+        icon: "eye"
+        on_release: app.root.current_screen.detail_supplier(code.text)
+
+      MDIconButton:
+        pos_hint:{"center_y":0.5}
+        md_bg_color:"orange"
         icon: "text-box-edit"
         on_release: app.root.current_screen.open_modal(code=code.text,update=True)
       MDIconButton:

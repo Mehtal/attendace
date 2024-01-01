@@ -1,5 +1,6 @@
 from kivy.app import App
 from kivy.graphics import Color, Line
+from kivy.lang.builder import Builder
 from kivy.metrics import dp
 from kivy.properties import NumericProperty, StringProperty
 from kivy.uix.recycleview.views import RecycleDataViewBehavior
@@ -7,6 +8,8 @@ from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.button import MDRectangleFlatButton
 from kivymd.uix.label import MDLabel
 from kivymd.uix.recycleview import MDRecycleView
+
+Builder.load_file("components/table.kv")
 
 
 class FlatButton(MDRectangleFlatButton):

@@ -1,5 +1,4 @@
 #:include sidebar.kv
-#:include table_template.kv
 
 <SupplierDetailScreen>:
   MDFloatLayout:
@@ -25,7 +24,7 @@
         text: root.adresse
       MDRectangleFlatButton:
         text: "Create Supplier"
-        on_release: root.create_supplier(id_nom.text,id_telephone.text,id_adresse.text)
+        on_release: root.create_supplier(id_create_form)
 
 
 <SupplierForm>:
