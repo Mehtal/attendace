@@ -1,13 +1,15 @@
 import os
 import sys
 
-BASE_DIR = os.getcwd()
-sys.path.append(BASE_DIR)
 from kivy.config import Config as cfg
 
 cfg.set("graphics", "window_state", "maximized")
+
+BASE_DIR = os.getcwd()
+sys.path.append(BASE_DIR)
+
+
 from kivy.core.text import LabelBase
-from kivy.properties import ObjectProperty, StringProperty
 from kivy.uix.screenmanager import Screen, ScreenManager
 from kivymd.app import MDApp
 from kivymd.font_definitions import theme_font_styles
@@ -16,33 +18,7 @@ from kivymd.uix.dialog import MDDialog
 from kivymd.uix.floatlayout import MDFloatLayout
 
 from components import FlatButton
-from components.supplier.create import SupplierForm
-from supplier.models import Supplier
-
-
-class SupplierDetailScreen(Screen):
-    model = ObjectProperty
-    supplier = Supplier()
-
-    code = StringProperty()
-    nom = StringProperty()
-    telephone = StringProperty()
-    adresse = StringProperty()
-
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-
-    def load_data(self, code):
-        self.data = self.supplier._read(code)
-        self.code = str(self.data["code"])
-        self.nom = self.data["nom"]
-        self.telephone = self.data["telephone"]
-        self.adresse = self.data["adresse"]
-
-    def create_supplier(self, form):
-        screen = self.manager.get_screen("sup")
-        screen.create_supplier(form)
-        self.manager.current = "sup"
+from supplier import Supplier, SupplierDetailScreen, SupplierForm
 
 
 class SupplierScreen(Screen):
@@ -55,6 +31,8 @@ class SupplierScreen(Screen):
 
     def detail_supplier(self, code):
         detail_screen = self.manager.get_screen("sup-detail")
+        detail_screen.model = self.supplier
+        detail_screen.load_data(code)
         self.manager.current = "sup-detail"
 
     def delete_supplier(self, id: str) -> None:

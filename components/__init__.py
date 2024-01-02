@@ -9,7 +9,12 @@ from kivymd.uix.button import MDRectangleFlatButton
 from kivymd.uix.label import MDLabel
 from kivymd.uix.recycleview import MDRecycleView
 
-Builder.load_file("components/table.kv")
+kv_list = [
+    "components/sidebar.kv",
+    "components/table.kv",
+]
+for file in kv_list:
+    Builder.load_file(file)
 
 
 class FlatButton(MDRectangleFlatButton):
