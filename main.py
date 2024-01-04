@@ -13,92 +13,15 @@ from kivy.core.text import LabelBase
 from kivy.uix.screenmanager import Screen, ScreenManager
 from kivymd.app import MDApp
 from kivymd.font_definitions import theme_font_styles
-from kivymd.uix.button import MDRectangleFlatButton
-from kivymd.uix.dialog import MDDialog
-from kivymd.uix.floatlayout import MDFloatLayout
 
 from components import FlatButton
-from supplier import Supplier, SupplierDetailScreen, SupplierForm
-
-
-class SupplierScreen(Screen):
-    supplier = Supplier()
-    dialog = None
-
-    def on_kv_post(self, base_widget):
-        self.rv = self.ids.id_rv
-        self.rv.load_data(Supplier)
-
-    def detail_supplier(self, code):
-        detail_screen = self.manager.get_screen("sup-detail")
-        detail_screen.model = self.supplier
-        detail_screen.load_data(code)
-        self.manager.current = "sup-detail"
-
-    def delete_supplier(self, id: str) -> None:
-        self.supplier._delete(id)
-        self.rv.load_data(Supplier)
-
-    def open_modal(self, code: str = "", update: bool = False):
-        if not self.dialog:
-            self.dialog = MDDialog(
-                title="UPDATE SUPPLIER",
-                type="custom",
-                content_cls=SupplierForm(),
-            )
-        form = self.dialog.content_cls
-        if not update:
-            button = MDRectangleFlatButton(
-                text="CREATE", on_release=lambda x: self.create_supplier(form)
-            )
-            form.ids.id_btn_list.add_widget(button)
-        else:
-            data = self.supplier._read(code)
-            form.load_data(data)
-            button = MDRectangleFlatButton(
-                text="UPDATE", on_release=lambda x: self.update_supplier(form)
-            )
-            form.ids.id_btn_list.add_widget(button)
-        self.dialog.open()
-
-    def update_supplier(self, form):
-        code = form.code
-        nom = form.ids.id_nom.text
-        telephone = form.ids.id_telephone.text
-        adresse = form.ids.id_adresse.text
-        self.supplier.data = {
-            "nom": nom,
-            "telephone": telephone,
-            "adresse": adresse,
-        }
-        self.supplier._update(code)
-        self.rv.load_data(Supplier)
-        self.dialog_close()
-
-    def create_supplier(self, form):
-        nom = form.ids.id_nom.text
-        telephone = form.ids.id_telephone.text
-        adresse = form.ids.id_adresse.text
-        self.supplier.data = {
-            "nom": nom,
-            "telephone": telephone,
-            "adresse": adresse,
-        }
-        self.supplier._create()
-        self.rv.load_data(Supplier)
-        self.dialog_close()
-
-    def dialog_close(self, *args):
-        self.dialog.dismiss()
-        self.dialog = None
-
-
-class Sidebar(MDFloatLayout):
-    pass
+from supplier import SupplierDetailScreen, SupplierScreen
 
 
 class MainApp(MDApp):
     def build(self):
+        self.theme_cls.material_style = "M3"
+
         LabelBase.register(
             name="HackNerdFont",
             fn_regular="fonts/HackNerdFont-Regular.ttf",

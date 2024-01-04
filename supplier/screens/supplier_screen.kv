@@ -1,6 +1,4 @@
-
-
-<BaseScreen>:
+<SupplierScreen>:
   name: "supplier"
   id: id_supplier_screen
   MDBoxLayout:
@@ -50,7 +48,7 @@
           line_color: "green"
           md_bg_color: "green"
           padding:[25,15,25,15]
-          on_release: root.manager.current = "child" 
+          on_release: root.open_modal() 
 
 
       MDBoxLayout:
@@ -103,9 +101,4 @@
 
                 
 
-              
-
-
-
-         
 

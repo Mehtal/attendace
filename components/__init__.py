@@ -6,6 +6,7 @@ from kivy.properties import NumericProperty, StringProperty
 from kivy.uix.recycleview.views import RecycleDataViewBehavior
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.button import MDRectangleFlatButton
+from kivymd.uix.floatlayout import MDFloatLayout
 from kivymd.uix.label import MDLabel
 from kivymd.uix.recycleview import MDRecycleView
 
@@ -15,6 +16,10 @@ kv_list = [
 ]
 for file in kv_list:
     Builder.load_file(file)
+
+
+class Sidebar(MDFloatLayout):
+    pass
 
 
 class FlatButton(MDRectangleFlatButton):
