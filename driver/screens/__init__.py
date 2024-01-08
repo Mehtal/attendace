@@ -51,11 +51,11 @@ class DriverScreen(Screen):
         code = form.code
         nom = form.ids.id_nom.text
         prenom = form.ids.id_prenom.text
-        code_forniseur = form.ids.id_code_forniseur.text
+        code_fourniseur = form.ids.id_code_fourniseur.text
         self.model.data = {
             "nom": nom,
             "prenom": prenom,
-            "code_forniseur": code_forniseur,
+            "code_fourniseur": code_fourniseur,
         }
         self.model._update(code)
         self.rv.load_data(Driver)
@@ -64,11 +64,11 @@ class DriverScreen(Screen):
     def create_driver(self, form):
         nom = form.ids.id_nom.text
         prenom = form.ids.id_prenom.text
-        code_forniseur = form.ids.id_code_forniseur.text
+        code_fourniseur = int(form.ids.id_code_fourniseur.text)
         self.model.data = {
             "nom": nom,
             "prenom": prenom,
-            "code_forniseur": code_forniseur,
+            "code_fourniseur": code_fourniseur,
         }
         self.model._create()
         self.rv.load_data(Driver)
@@ -86,7 +86,7 @@ class DriverDetailScreen(Screen):
     code = StringProperty()
     nom = StringProperty()
     prenom = StringProperty()
-    code_forniseur = StringProperty()
+    code_fourniseur = StringProperty()
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -96,7 +96,7 @@ class DriverDetailScreen(Screen):
         self.code = str(self.data["code"])
         self.nom = self.data["nom"]
         self.prenom = self.data["prenom"]
-        self.code_forniseur = self.data["code_forniseur"]
+        self.code_fourniseur = self.data["code_fourniseur"]
 
     def create_driver(self, form):
         screen = self.manager.get_screen("sup")

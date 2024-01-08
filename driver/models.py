@@ -27,7 +27,7 @@ class DriverProtocol:
         try:
             with self.conn:
                 query: str = """
-                INSERT strO chauffeur(nom,prenom,coode_fourniseur)
+                INSERT INTO chauffeur(nom,prenom,code_fourniseur)
                 VALUES(?,?,?)
                 """
                 self.cursor.execute(
