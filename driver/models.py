@@ -1,0 +1,120 @@
+import sqlite3
+
+
+class DriverProtocol:
+    conn = sqlite3.connect("sqlite.db")
+    conn.row_factory = sqlite3.Row
+    cursor = conn.cursor()
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self._table_create()
+
+    def _table_create(self):
+        query: str = """
+        CREATE TABLE IF NOT EXISTS chauffeur(
+        code INTEGER PRIMARY KEY AUTOINCREMENT,
+        nom TEXT NOT NULL,
+        prenom TEXT NOT NULL,
+        code_fourniseur INTEGER ,
+        FOREIGN KEY (code_fourniseur) REFERENCES fourniseur (code)
+        );
+        """
+        self.cursor.execute(query)
+        self.conn.commit()
+
+    def _create(self, data: dict):
+        try:
+            with self.conn:
+                query: str = """
+                INSERT strO chauffeur(nom,prenom,coode_fourniseur)
+                VALUES(?,?,?)
+                """
+                self.cursor.execute(
+                    query,
+                    (
+                        data["nom"],
+                        data["prenom"],
+                        data["code_fourniseur"],
+                    ),
+                )
+
+                self.conn.commit()
+                query = "SELECT * FROM chauffeur WHERE code=?"
+                lastrowid = self.cursor.lastrowid
+                cursor = self.cursor.execute(query, str(lastrowid))
+                created_chauffeur = cursor.fetchone()
+                return created_chauffeur
+        except Exception as e:
+            print(e)
+
+    def _read(self, code: str):
+        query: str = "SELECT * FROM chauffeur WHERE code=?"
+        cursor = self.cursor.execute(query, str(code))
+        fetched_chauffeur = cursor.fetchone()
+        return fetched_chauffeur
+
+    def _update(self, code: str, data: dict):
+        query = """
+        UPDATE chauffeur
+        SET nom = ?, prenom = ?, code_fourniseur = ? 
+        WHERE code = ?
+        """
+        cursor = self.cursor.execute(
+            query,
+            (
+                data["nom"],
+                data["prenom"],
+                data["code_fourniseur"],
+                code,
+            ),
+        )
+        self.conn.commit()
+        updated_chauffeur = cursor.fetchone()
+        return updated_chauffeur
+
+    def _delete(self, code: str):
+        query = "DELETE FROM chauffeur WHERE code=?"
+        cursor = self.cursor.execute(query, str(code))
+        self.conn.commit()
+
+    def _list(self):
+        query: str = "SELECT * FROM chauffeur"
+        cursor = self.cursor.execute(query)
+        fetch_list = cursor.fetchall()
+        return fetch_list
+
+
+class Driver:
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.data = {}
+        self.db = DriverProtocol()
+
+    def _create(self):
+        return self.db._create(self.data)
+
+    def _read(self, code: str):
+        return self.db._read(code)
+
+    def _update(self, code: str):
+        return self.db._update(code, self.data)
+
+    def _delete(self, code):
+        return self.db._delete(code)
+
+    def _list(self):
+        return self.db._list()
+
+    def set_data(
+        self,
+        nom,
+        prenom,
+        code_fourniseur,
+    ):
+        self.data = {
+            "nom": nom,
+            "prenom": prenom,
+            "code_fourniseur": code_fourniseur,
+        }
+        self._create()

@@ -15,6 +15,7 @@ from kivymd.app import MDApp
 from kivymd.font_definitions import theme_font_styles
 
 from components import FlatButton
+from driver import DriverScreen
 from supplier import SupplierDetailScreen, SupplierScreen
 
 
@@ -44,6 +45,7 @@ class MainApp(MDApp):
         self.supplier_screen = SupplierScreen(name="sup")
         sm.add_widget(self.supplier_screen)
         sm.add_widget(SupplierDetailScreen(name="sup-detail"))
+        sm.add_widget(DriverScreen(name="driver"))
         return sm
 
 

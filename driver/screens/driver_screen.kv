@@ -1,0 +1,104 @@
+<DriverScreen>:
+  name: "driver"
+  id: id_driver_screen
+  MDBoxLayout:
+    id : id_main_wrapper
+    orientation: "horizontal"
+    Sidebar:
+      id: id_sidebar
+            
+    MDFloatLayout:
+      id: id_main_screen
+      #md_bg_color:"#131f30"
+      md_bg_color:"white"
+
+      MDBoxLayout:
+        id: id_navbar
+        md_bg_color: app.theme_cls.bg_dark
+        size_hint_y: None
+        height: dp(50)
+        pos_hint:{"center_x":0.5,"top":1}
+
+      MDBoxLayout:
+        orientation: "horizontal"
+        adaptive_height: True
+        padding:50,10,50,10
+        pos_hint:{"center_x":0.5}
+        pos: (0,id_table_header.pos[1] + id_table_header.height + 50)
+
+        MDLabel:
+          color: "black"
+          font_name: "HackNerdFont"
+          text: "󱚞 DRIVER SCREEN"
+          font_size: "30"
+          bold:True
+          italic:True
+          
+
+        MDRoundFlatIconButton:
+          id: id_toggle_create_button
+          text: "driver"
+          icon: "plus"
+          bold:True
+          italic:True
+          font_size: 22
+          font_name: "HackNerdFont"
+          text_color: "white"
+          icon_color:"white"
+          line_color: "green"
+          md_bg_color: "green"
+          padding:[25,15,25,15]
+          on_release: root.open_modal() 
+
+
+      MDBoxLayout:
+        id: id_list_view
+        orientation: "vertical"
+        padding:50
+        pos_hint:{"center_x":0.5}
+        pos: (0,50)
+        size_hint_y: 0.8
+
+        MDBoxLayout:
+          id: id_table_header
+          size_hint_y:None
+          height: dp(50)
+          orientation:"horizontal"
+          pos_hint: {"top":1,"center_x":0.5}
+          md_bg_color:app.theme_cls.bg_dark
+          CLabel:
+            id: id_header_code
+            color: "white"
+            text: "CODE"
+            adaptive_width:True
+            bold:True
+            size_hint_x:0.5
+          CLabel:
+            color: "white"
+            text: "NOM"
+            size_hint_x:2
+            bold:True
+          CLabel:
+            color: "white"
+            text: "PRENOM"
+            size_hint_x:2
+            bold:True
+          CLabel:
+            color: "white"
+            text: "FORNISEUR"
+            size_hint_x:2
+            bold:True
+          CLabel:
+            color: "white"
+            text: "ACTIONS"
+            size_hint_x:2
+            bold:True
+
+        RV:
+          id: id_rv
+
+          
+
+                
+
+
