@@ -23,6 +23,12 @@ class DriverProtocol:
         self.cursor.execute(query)
         self.conn.commit()
 
+    def _table_info(self):
+        self.cursor.execute("PRAGMA table_info(chauffeur)")
+        cols = self.cursor.fetchall()
+        col_name = [col["name"] for col in cols]
+        return col_name
+
     def _create(self, data: dict):
         try:
             with self.conn:
@@ -81,8 +87,11 @@ class DriverProtocol:
     def _list(self):
         query: str = "SELECT * FROM chauffeur"
         cursor = self.cursor.execute(query)
-        fetch_list = cursor.fetchall()
-        return fetch_list
+        rows = cursor.fetchall()
+        data = []
+        for row in rows:
+            data.append({f"{col}": str(row[col]) for col in row.keys()})
+        return data
 
 
 class Driver:
@@ -106,6 +115,9 @@ class Driver:
     def _list(self):
         return self.db._list()
 
+    def _table_info(self):
+        return self.db._table_info()
+
     def set_data(
         self,
         nom,
@@ -117,4 +129,3 @@ class Driver:
             "prenom": prenom,
             "code_fourniseur": code_fourniseur,
         }
-        self._create()

@@ -5,7 +5,57 @@
   font_size: 22
   color: "black"
   
+<DriverDataRow>:
+  bold: True
+  md_bg_color: 1,1,1,1
+  canvas:
+    Color:
+      rgba:(0,0,0,0.8)
+    Line:
+      width: 1 
+      points:(self.x,self.height,self.x,self.y,self.width,self.y,self.width,self.height)
+  CLabel:
+    id : code
+    text: str(self.parent.code)
+    adaptive_width: True
+    size_hint_x:0.5
+  CLabel:
+    id : nom
+    text: self.parent.nom
+    size_hint_x: 2
+  CLabel:
+    text: self.parent.prenom 
+    size_hint_x: 2
+  CLabel:
+    size_hint_x: 2
+    id: data_cell
+    text: self.parent.code_fourniseur
+  MDAnchorLayout:
+    spacing:10
+    size_hint_x:2
+    anchor_x:"center"
+    anchor_y: "center"
+    MDBoxLayout:
+      adaptive_size:True
+      padding: dp(10)
+      spacing:20
+      MDIconButton:
+        pos_hint:{"center_y":0.5}
+        md_bg_color:"green"
+        icon: "eye"
+        on_release: 
 
+      MDIconButton:
+        pos_hint:{"center_y":0.5}
+        md_bg_color:"orange"
+        icon: "text-box-edit"
+        on_release:
+      MDIconButton:
+        icon:"delete"
+        pos_hint:{"center_y":0.5}
+        md_bg_color:"red"
+        on_release: 
+ 
 <DataRow>:
   bold: True
   md_bg_color: 1,1,1,1
