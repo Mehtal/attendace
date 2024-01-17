@@ -49,14 +49,14 @@
         pos_hint:{"center_y":0.5}
         md_bg_color:"orange"
         icon: "text-box-edit"
-        on_release:
+        on_release: app.root.current_screen.open_modal(code.text,update=True)
       MDIconButton:
         icon:"delete"
         pos_hint:{"center_y":0.5}
         md_bg_color:"red"
-        on_release: 
+        on_release: app.root.current_screen.delete_driver(code.text)
  
-<DataRow>:
+<SupplierDataRow>:
   bold: True
   md_bg_color: 1,1,1,1
   canvas:
@@ -109,7 +109,7 @@
       
 
 <RV>:
-  viewclass: 'DataRow'
+  viewclass: 'SupplierDataRow'
   RecycleBoxLayout: 
     default_size_hint:1,None
 #default_size:None,100 

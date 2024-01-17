@@ -12,4 +12,4 @@ class DriverForm(MDBoxLayout):
         self.code = str(data["code"])
         self.nom = data["nom"]
         self.prenom = data["prenom"]
-        self.code_fourniseur = data["code_fourniseur"]
+        self.code_fourniseur = str(data["code_fourniseur"])

@@ -11,7 +11,7 @@ class SupplierProtocol:
 
     def _table_create(self):
         query: str = """
-        CREATE TABLE IF NOT EXISTS forniseur(
+        CREATE TABLE IF NOT EXISTS fourniseur(
         code INTEGER PRIMARY KEY AUTOINCREMENT,
         nom TEXT NOT NULL,
         telephone TEXT NOT NULL,
@@ -20,11 +20,17 @@ class SupplierProtocol:
         self.cursor.execute(query)
         self.conn.commit()
 
+    def _table_info(self):
+        self.cursor.execute("PRAGMA table_info(fourniseur)")
+        cols = self.cursor.fetchall()
+        col_name = [col["name"] for col in cols]
+        return col_name
+
     def _create(self, data: dict):
         try:
             with self.conn:
                 query: str = """
-                INSERT INTO forniseur(nom,telephone,adresse)
+                INSERT INTO fourniseur(nom,telephone,adresse)
                 VALUES(?,?,?)
                 """
                 self.cursor.execute(
@@ -32,7 +38,7 @@ class SupplierProtocol:
                 )
 
                 self.conn.commit()
-                query = "SELECT * FROM forniseur WHERE code=?"
+                query = "SELECT * FROM fourniseur WHERE code=?"
                 lastrowid = self.cursor.lastrowid
                 cursor = self.cursor.execute(
                     query,
@@ -44,14 +50,14 @@ class SupplierProtocol:
             print(e)
 
     def _read(self, id: str):
-        query: str = "SELECT * FROM forniseur WHERE code=?"
+        query: str = "SELECT * FROM fourniseur WHERE code=?"
         cursor = self.cursor.execute(query, (id,))
         fetched_supplier = cursor.fetchone()
         return fetched_supplier
 
     def _update(self, id: str, data: dict):
         query = """
-        UPDATE forniseur
+        UPDATE fourniseur
         SET nom = ?, telephone = ?,adresse = ?
         WHERE code = ?
         """
@@ -69,12 +75,12 @@ class SupplierProtocol:
         return updated_supplier
 
     def _delete(self, id: str) -> None:
-        query = "DELETE FROM forniseur WHERE code= ? "
+        query = "DELETE FROM fourniseur WHERE code= ? "
         self.cursor.execute(query, (id,))
         self.conn.commit()
 
     def _list(self) -> list:
-        query: str = "SELECT * FROM forniseur"
+        query: str = "SELECT * FROM fourniseur"
         cursor = self.cursor.execute(query)
         rows = cursor.fetchall()
         data = []

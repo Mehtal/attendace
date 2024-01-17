@@ -16,9 +16,7 @@ class DriverScreen(Screen):
     def on_kv_post(self, base_widget):
         self.rv = self.ids.id_rv
         self.rv.viewclass = DriverDataRow
-        # self.rv.viewclass().set_properties(self.model())
         self.rv.load_data(self.model)
-        print(self.rv.data)
 
     def detail_driver(self, code):
         detail_screen = self.manager.get_screen("driver-detail")
@@ -27,8 +25,8 @@ class DriverScreen(Screen):
         self.manager.current = "driver-detail"
 
     def delete_driver(self, code: str) -> None:
-        self.model._delete(code)
-        # self.rv.load_data(self.model)
+        self.model()._delete(code)
+        self.rv.load_data(self.model)
 
     def open_modal(self, code: str = "", update: bool = False):
         if not self.dialog:
@@ -44,7 +42,7 @@ class DriverScreen(Screen):
             )
             form.ids.id_btn_list.add_widget(button)
         else:
-            data = self.model._read(code)
+            data = self.model()._read(code)
             form.load_data(data)
             button = MDRectangleFlatButton(
                 text="UPDATE", on_release=lambda x: self.update_driver(form)
@@ -57,22 +55,24 @@ class DriverScreen(Screen):
         nom = form.ids.id_nom.text
         prenom = form.ids.id_prenom.text
         code_fourniseur = form.ids.id_code_fourniseur.text
-        self.model().data = {
+        driver = self.model()
+        driver.data = {
             "nom": nom,
             "prenom": prenom,
             "code_fourniseur": code_fourniseur,
         }
-        self.model()._update(code)
-        # #self.rv.load_data(self.model)
+        driver._update(code)
+        self.rv.load_data(self.model)
         self.dialog_close()
 
     def create_driver(self, form):
         nom = form.ids.id_nom.text
         prenom = form.ids.id_prenom.text
         code_fourniseur = int(form.ids.id_code_fourniseur.text)
-        self.model().set_data(nom, prenom, code_fourniseur)
-        self.model()._create()
-        # self.rv.load_data(self.model)
+        driver = self.model()
+        driver.set_data(nom, prenom, code_fourniseur)
+        driver._create()
+        self.rv.load_data(self.model)
         self.dialog_close()
 
     def dialog_close(self, *args):

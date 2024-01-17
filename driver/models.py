@@ -63,7 +63,7 @@ class DriverProtocol:
     def _update(self, code: str, data: dict):
         query = """
         UPDATE chauffeur
-        SET nom = ?, prenom = ?, code_fourniseur = ? 
+        SET nom = ?, prenom = ?, code_fourniseur = ?
         WHERE code = ?
         """
         cursor = self.cursor.execute(

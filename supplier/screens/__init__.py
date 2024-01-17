@@ -3,6 +3,7 @@ from kivy.uix.screenmanager import Screen
 from kivymd.uix.button import MDRectangleFlatButton
 from kivymd.uix.dialog import MDDialog
 
+from components import SupplierDataRow
 from supplier.forms import SupplierForm
 from supplier.models import Supplier
 
@@ -13,6 +14,7 @@ class SupplierScreen(Screen):
 
     def on_kv_post(self, base_widget):
         self.rv = self.ids.id_rv
+        self.rv.viewclass = SupplierDataRow
         self.rv.load_data(Supplier)
 
     def detail_supplier(self, code):

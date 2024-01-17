@@ -20,7 +20,7 @@ class TeamProtocol(Basedb):
         FOREIGEN KEY (code_rotation) REFERENCES rotation (id),
         FOREIGEN KEY (code_ligne) REFERENCES ligne (id),
         FOREIGEN KEY (code_chauffeur) REFERENCES chauffeur (id),
-        FOREIGEN KEY (code_fourniseur) REFERENCES forniseur (id),
+        FOREIGEN KEY (code_fourniseur) REFERENCES fourniseur (id),
         """
         self.cursor.execute(query)
         self.conn.commit()
