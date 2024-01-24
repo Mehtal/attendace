@@ -6,12 +6,14 @@ from kivymd.uix.dialog import MDDialog
 from components import DriverDataRow
 from driver.forms import DriverForm
 from driver.models import Driver
+from supplier.models import Supplier
 
 
 class DriverScreen(Screen):
     model = Driver
     dialog = None
     viewclass = DriverDataRow
+    supplier = Supplier
 
     def on_kv_post(self, base_widget):
         self.rv = self.ids.id_rv
@@ -31,7 +33,7 @@ class DriverScreen(Screen):
     def open_modal(self, code: str = "", update: bool = False):
         if not self.dialog:
             self.dialog = MDDialog(
-                title="UPDATE DRIVER",
+                title="CREATE DRIVER",
                 type="custom",
                 content_cls=DriverForm(),
             )
@@ -42,6 +44,7 @@ class DriverScreen(Screen):
             )
             form.ids.id_btn_list.add_widget(button)
         else:
+            self.dialog.title = "UPDATE DRIVER"
             data = self.model()._read(code)
             form.load_data(data)
             button = MDRectangleFlatButton(
@@ -54,13 +57,9 @@ class DriverScreen(Screen):
         code = form.code
         nom = form.ids.id_nom.text
         prenom = form.ids.id_prenom.text
-        code_fourniseur = form.ids.id_code_fourniseur.text
+        code_fourniseur = form.fourniseur["code"]
         driver = self.model()
-        driver.data = {
-            "nom": nom,
-            "prenom": prenom,
-            "code_fourniseur": code_fourniseur,
-        }
+        driver.set_data(nom, prenom, code_fourniseur)
         driver._update(code)
         self.rv.load_data(self.model)
         self.dialog_close()
@@ -68,7 +67,7 @@ class DriverScreen(Screen):
     def create_driver(self, form):
         nom = form.ids.id_nom.text
         prenom = form.ids.id_prenom.text
-        code_fourniseur = int(form.ids.id_code_fourniseur.text)
+        code_fourniseur = form.fourniseur["code"]
         driver = self.model()
         driver.set_data(nom, prenom, code_fourniseur)
         driver._create()

@@ -53,6 +53,7 @@ class DriverDataRow(RecycleDataViewBehavior, MDBoxLayout):
     nom = StringProperty()
     prenom = StringProperty()
     code_fourniseur = StringProperty()
+    nom_fourniseur = StringProperty()
 
     def delete_data(self, model):
         model._delete(self.code)
@@ -63,6 +64,7 @@ class DriverDataRow(RecycleDataViewBehavior, MDBoxLayout):
         self.nom = data["nom"]
         self.prenom = data["prenom"]
         self.code_fourniseur = data["code_fourniseur"]
+        self.nom_fourniseur = data["nom_fourniseur"]
         super().refresh_view_attrs(rv, index, data)
 
 

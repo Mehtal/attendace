@@ -11,15 +11,16 @@
   MDTextField:
     id: id_nom
     hint_text: "enter name"
-    text : root.nom
+    text: root.nom
   MDTextField:
     id: id_prenom
     hint_text: "enter prenom"
     text: root.prenom
   MDTextField:
-    id: id_code_fourniseur
-    hint_text: "enter code_fourniseur"
-    text : root.code_fourniseur
+    id: id_fourniseur
+    text : "" if not root.fourniseur else root.fourniseur["nom"]
+    value: ""
+    on_focus: if self.focus : root.get_fourniseur_list()
   MDBoxLayout
     id: id_btn_list
     pos_hint:{"right":1}

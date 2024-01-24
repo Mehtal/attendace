@@ -47,8 +47,8 @@ class DriverProtocol:
 
                 self.conn.commit()
                 query = "SELECT * FROM chauffeur WHERE code=?"
-                lastrowid = self.cursor.lastrowid
-                cursor = self.cursor.execute(query, str(lastrowid))
+                lastrowid = str(self.cursor.lastrowid)
+                cursor = self.cursor.execute(query, (lastrowid,))
                 created_chauffeur = cursor.fetchone()
                 return created_chauffeur
         except Exception as e:
@@ -56,7 +56,7 @@ class DriverProtocol:
 
     def _read(self, code: str):
         query: str = "SELECT * FROM chauffeur WHERE code=?"
-        cursor = self.cursor.execute(query, str(code))
+        cursor = self.cursor.execute(query, (code,))
         fetched_chauffeur = cursor.fetchone()
         return fetched_chauffeur
 
@@ -81,11 +81,16 @@ class DriverProtocol:
 
     def _delete(self, code: str):
         query = "DELETE FROM chauffeur WHERE code=?"
-        cursor = self.cursor.execute(query, str(code))
+        cursor = self.cursor.execute(query, (code,))
         self.conn.commit()
 
     def _list(self):
-        query: str = "SELECT * FROM chauffeur"
+        query: str = """
+            SELECT *,fourniseur.nom as nom_fourniseur
+            FROM chauffeur
+            JOIN fourniseur ON 
+            code_fourniseur = fourniseur.code;
+            """
         cursor = self.cursor.execute(query)
         rows = cursor.fetchall()
         data = []
