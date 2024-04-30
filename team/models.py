@@ -12,9 +12,9 @@ class RotationProtocol:
 
     def _table_create(self):
         query: str = """
-        CREATE TABLE IF NOT EXISTS rotation(
+        CREATE TABLE IF NOT EXISTS rotation (
         code INTEGER PRIMARY KEY AUTOINCREMENT,
-        nom TEXT NOT NULL,
+        nom TEXT NOT NULL
         );
         """
         self.cursor.execute(query)
@@ -24,7 +24,7 @@ class RotationProtocol:
         try:
             with self.conn:
                 query: str = """
-                INSERT INTO member(nom)
+                INSERT INTO rotation(nom)
                 VALUES(?)
                 """
                 self.cursor.execute(
@@ -98,7 +98,9 @@ class MemberProtocol:
         nom TEXT NOT NULL,
         prenom TEXT NOT NULL,
         code_rotation INTEGER NOT NULL,
+        code_equipe INTEGER NOT NULL,
         FOREIGN KEY (code_rotation) REFERENCES rotation (code)
+        FOREIGN KEY (code_equipe) REFERENCES equipe (code)
         );
         """
         self.cursor.execute(query)
@@ -108,8 +110,8 @@ class MemberProtocol:
         try:
             with self.conn:
                 query: str = """
-                INSERT INTO member(nom,prenom,code_rotation)
-                VALUES(?,?,?)
+                INSERT INTO member(nom,prenom,code_rotation,code_equipe)
+                VALUES(?,?,?,?)
                 """
                 self.cursor.execute(
                     query,
@@ -117,6 +119,7 @@ class MemberProtocol:
                         data["nom"],
                         data["prenom"],
                         data["code_rotation"],
+                        data["code_equipe"],
                     ),
                 )
 
@@ -138,7 +141,7 @@ class MemberProtocol:
     def _update(self, code: int, data: dict):
         query = """
         UPDATE member
-        SET nom = ?, prenom = ?,code_rotation = ? 
+        SET nom = ?, prenom = ?,code_rotation,code_equipe = ? 
         WHERE code = ?
         """
         cursor = self.cursor.execute(
@@ -147,6 +150,7 @@ class MemberProtocol:
                 data["nom"],
                 data["prenom"],
                 data["code_rotation"],
+                data["code_equipe"],
                 code,
             ),
         )
@@ -163,7 +167,8 @@ class MemberProtocol:
         query: str = """
         SELECT *
         FROM member
-        JOIN rotation ON equipe.code_rotation = rotation.code;
+        JOIN rotation ON member.code_rotation = rotation.code
+        JOIN equipe ON member.code_equipe = equipe.code;
         """
         cursor = self.cursor.execute(query)
         rows = cursor.fetchall()
@@ -187,12 +192,10 @@ class TeamProtocol:
         CREATE TABLE IF NOT EXISTS equipe(
         code INTEGER PRIMARY KEY AUTOINCREMENT,
         nom TEXT NOT NULL,
-        code_member INTEGER ,
         code_rotation INTEGER NOT NULL,
         code_ligne INTEGER NOT NULL,
         code_chauffeur INTEGER NOT NULL,
         code_fourniseur INTEGER NOT NULL,
-        FOREIGN KEY (code_member) REFERENCES member (code),
         FOREIGN KEY (code_rotation) REFERENCES rotation (code),
         FOREIGN KEY (code_ligne) REFERENCES ligne (code),
         FOREIGN KEY (code_chauffeur) REFERENCES chauffeur (code),
@@ -206,14 +209,13 @@ class TeamProtocol:
         try:
             with self.conn:
                 query: str = """
-                INSERT INTO equipe(nom,code_member,code_rotation,code_ligne,code_chauffeur,code_fourniseur)
-                VALUES(?,?,?,?,?,?)
+                INSERT INTO equipe(nom,code_rotation,code_equipe,code_ligne,code_chauffeur,code_fourniseur)
+                VALUES(?,?,?,?,?)
                 """
                 self.cursor.execute(
                     query,
                     (
                         data["nom"],
-                        data["code_member"],
                         data["code_rotation"],
                         data["code_ligne"],
                         data["code_chauffeur"],
@@ -230,24 +232,23 @@ class TeamProtocol:
         except Exception as e:
             print(e)
 
-    def _read(self, id: int):
+    def _read(self, code: int):
         query: str = "SELECT * FROM equipe WHERE code=?"
         cursor = self.cursor.execute(query, (code,))
         fetched_team = cursor.fetchone()
         return fetched_team
 
-    def _update(self, id: int, data: dict):
+    def _update(self, code: int, data: dict):
         query = """
         UPDATE equipe
-        SET nom = ?, code_member = ?,code_rotation = ? , code_ligne= ?,
-        code_chauffeur = ?, code_fourniseur = ? 
+        SET nom = ?, code_rotation = ?, code_ligne= ?,
+        code_chauffeur = ?, code_fourniseur = ?
         WHERE code = ?
         """
         cursor = self.cursor.execute(
             query,
             (
                 data["nom"],
-                data["code_member"],
                 data["code_rotation"],
                 data["code_ligne"],
                 data["code_chauffeur"],
@@ -259,17 +260,15 @@ class TeamProtocol:
         updated_team = cursor.fetchone()
         return updated_team
 
-    def _delete(self, id: int):
-        query = "DELETE FROM equipe WHERE id=?"
+    def _delete(self, code: int):
+        query = "DELETE FROM equipe WHERE code = ?"
         cursor = self.cursor.execute(query, (code,))
         self.conn.commit()
 
     def _list(self):
-        query: str = "SELECT * FROM equipe"
-        """
+        query: str = """
         SELECT *
         FROM equipe
-        JOIN member ON equipe.code_member = member.code
         JOIN rotation ON equipe.code_rotation = rotation.code
         JOIN ligne ON equipe.code_ligne = ligne.code
         JOIN chauffeur ON equipe.code_chauffeur = chauffeur.code
@@ -309,7 +308,6 @@ class Rotation:
         nom,
     ):
         self.data = {"nom": nom}
-        self._create()
 
 
 class Member:
@@ -338,9 +336,14 @@ class Member:
         nom,
         prenom,
         code_rotation,
+        code_equipe,
     ):
-        self.data = {"nom": nom, "prenom": prenom, "code_rotation": code_rotation}
-        self._create()
+        self.data = {
+            "nom": nom,
+            "prenom": prenom,
+            "code_rotation": code_rotation,
+            "code_equipe": code_equipe,
+        }
 
 
 class Team:
@@ -367,7 +370,6 @@ class Team:
     def set_data(
         self,
         nom,
-        code_member,
         code_rotation,
         code_ligne,
         code_chauffeur,
@@ -375,10 +377,8 @@ class Team:
     ):
         self.data = {
             "nom": nom,
-            "code_member": code_member,
             "code_rotation": code_rotation,
             "code_ligne": code_ligne,
             "code_chauffeur": code_chauffeur,
             "code_fourniseur": code_fourniseur,
         }
-        self._create()

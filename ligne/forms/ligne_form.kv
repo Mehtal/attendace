@@ -1,4 +1,4 @@
-<DriverForm>:
+<LigneForm>:
   id:id_create_form
   spacing:50
   pos_hint:{"center_x":0.5,"center_y":0.5}
@@ -8,18 +8,9 @@
   padding:50
   MDTextField:
     id: id_nom
-    hint_text: "enter name"
+    hint_text: "example : depart - destination"
     text: root.nom
-  MDTextField:
-    id: id_prenom
-    hint_text: "enter prenom"
-    text: root.prenom
-  MDTextField:
-    id: id_fourniseur
-    text : "" if not root.fourniseur else root.fourniseur["nom"]
-    value: ""
-    on_focus: if self.focus : root.get_fourniseur_list()
-  MDBoxLayout
+  MDBoxLayout:
     id: id_btn_list
     pos_hint:{"right":1}
     adaptive_size: True

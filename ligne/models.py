@@ -109,4 +109,3 @@ class Ligne:
         nom,
     ):
         self.data = {"nom": nom}
-        self._create()

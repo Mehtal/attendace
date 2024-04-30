@@ -3,6 +3,7 @@ import sys
 
 from kivy.config import Config as cfg
 
+
 cfg.set("graphics", "window_state", "maximized")
 
 BASE_DIR = os.getcwd()
@@ -17,6 +18,8 @@ from kivymd.font_definitions import theme_font_styles
 from components import FlatButton
 from driver import DriverScreen
 from supplier import SupplierDetailScreen, SupplierScreen
+from ligne import LigneScreen
+from team.screens import TeamScreen
 
 
 class MainApp(MDApp):
@@ -42,10 +45,12 @@ class MainApp(MDApp):
         self.theme_cls.primary_palette = "Blue"
 
         sm = ScreenManager()
+        sm.add_widget(LigneScreen(name="ligne"))
         self.supplier_screen = SupplierScreen(name="sup")
         sm.add_widget(self.supplier_screen)
         sm.add_widget(SupplierDetailScreen(name="sup-detail"))
         sm.add_widget(DriverScreen(name="driver"))
+        sm.add_widget(TeamScreen(name="team"))
         return sm
 
 

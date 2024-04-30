@@ -47,6 +47,21 @@ class DataCell(MDLabel):
         self.line.rectangle = (self.x, self.y, self.width, self.height)
 
 
+class LigneDataRow(RecycleDataViewBehavior, MDBoxLayout):
+    index = 0
+    code = StringProperty()
+    nom = StringProperty()
+
+    def delete_data(self, model):
+        model._delete(self.code)
+
+    def refresh_view_attrs(self, rv, index, data):
+        self.index = index
+        self.code = data["code"]
+        self.nom = data["nom"]
+        super().refresh_view_attrs(rv, index, data)
+
+
 class DriverDataRow(RecycleDataViewBehavior, MDBoxLayout):
     index = 0
     code = StringProperty()
