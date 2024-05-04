@@ -1,15 +1,4 @@
-import os
-import sys
-
-from kivy.config import Config as cfg
-
-
-cfg.set("graphics", "window_state", "maximized")
-
-BASE_DIR = os.getcwd()
-sys.path.append(BASE_DIR)
-
-
+from settings import *
 from kivy.core.text import LabelBase
 from kivy.uix.screenmanager import Screen, ScreenManager
 from kivymd.app import MDApp

@@ -209,7 +209,7 @@ class TeamProtocol:
         try:
             with self.conn:
                 query: str = """
-                INSERT INTO equipe(nom,code_rotation,code_equipe,code_ligne,code_chauffeur,code_fourniseur)
+                INSERT INTO equipe(nom,code_rotation,code_ligne,code_chauffeur,code_fourniseur)
                 VALUES(?,?,?,?,?)
                 """
                 self.cursor.execute(

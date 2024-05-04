@@ -1,0 +1,72 @@
+<TeamForm>:
+  id:id_create_form
+  spacing:30
+  pos_hint:{"center_x":0.5,"center_y":0.5}
+  orientation:"vertical"
+  size_hint:0.6, None
+  height:self.minimum_height
+  padding:50
+  MDTextField:
+    id: id_nom
+    hint_text: "enter name"
+    text: root.nom
+  MDTextField:
+    id: id_rotation
+    text : "" 
+    hint_text: "add Rotation"
+    value: ""
+    on_focus: if self.focus : root.get_menu_list(self,root.rotation)
+  MDTextField:
+    id: id_ligne
+    hint_text: "add ligne"
+    text : "" 
+    value: ""
+    on_focus: if self.focus : root.get_menu_list(self,root.ligne)
+  MDTextField:
+    id: id_chauffeur
+    hint_text: "add chauffeur"
+    text : "" 
+    value: ""
+    on_focus: if self.focus : root.get_menu_list(self,root.chauffeur)
+  MDTextField:
+    id: id_fourniseur
+    hint_text: "add fourniseur"
+    text : "" 
+    value: ""
+    on_focus: if self.focus : root.get_menu_list(self,root.fourniseur)
+
+  MDBoxLayout
+    id: id_btn_list
+    pos_hint:{"right":1}
+    adaptive_size: True
+    spacing:30
+    MDRectangleFlatButton:
+      text: "Cancel"
+      on_release: app.root.current_screen.dialog_close()
+
+
+<RotationForm>:
+  id:id_rotation_form
+  spacing:50
+  pos_hint:{"center_x":0.5,"center_y":0.5}
+  orientation:"vertical"
+  size_hint:0.6, None
+  height:self.minimum_height
+  padding:50
+  MDTextField:
+    id: id_nom
+    hint_text: "enter name"
+    text: root.nom
+  MDBoxLayout
+    id: id_btn_list
+    pos_hint:{"right":1}
+    adaptive_size: True
+    spacing:30
+    MDRectangleFlatButton:
+      text: "Cancel"
+      on_release: app.root.current_screen.dialog_close()
+
+
+
+
+

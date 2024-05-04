@@ -67,6 +67,7 @@
       MDBoxLayout:
         orientation: "horizontal"
         adaptive_height: True
+        spacing: "36dp"
         padding:50,10,50,10
         pos_hint:{"center_x":0.5}
         pos: (0,id_table_header.pos[1] + id_table_header.height + 50)
@@ -94,6 +95,22 @@
           md_bg_color: "green"
           padding:[25,15,25,15]
           on_release: root.open_modal() 
+
+        MDRoundFlatIconButton:
+          text: "Rotation"
+          icon: "plus"
+          bold:True
+          italic:True
+          font_size: 22
+          font_name: "HackNerdFont"
+          text_color: "white"
+          icon_color:"white"
+          line_color: "green"
+          md_bg_color: "green"
+          padding:[25,15,25,15]
+          on_release: root.open_rotation_modal() 
+
+
 
 
       MDBoxLayout:
