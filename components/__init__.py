@@ -103,7 +103,7 @@ class SupplierDataRow(RecycleDataViewBehavior, MDBoxLayout):
 
 
 class RV(MDRecycleView):
-    def __init__(self, **kwargs):
+    def __init__(self, **kwargs) -> None:
         super(RV, self).__init__(**kwargs)
         app = App.get_running_app()
         app.rv = self

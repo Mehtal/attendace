@@ -1,4 +1,3 @@
-from settings import *
 from kivy.core.text import LabelBase
 from kivy.uix.screenmanager import Screen, ScreenManager
 from kivymd.app import MDApp
@@ -34,12 +33,12 @@ class MainApp(MDApp):
         self.theme_cls.primary_palette = "Blue"
 
         sm = ScreenManager()
+        sm.add_widget(TeamScreen(name="team"))
         sm.add_widget(LigneScreen(name="ligne"))
         self.supplier_screen = SupplierScreen(name="sup")
         sm.add_widget(self.supplier_screen)
         sm.add_widget(SupplierDetailScreen(name="sup-detail"))
         sm.add_widget(DriverScreen(name="driver"))
-        sm.add_widget(TeamScreen(name="team"))
         return sm
 
 

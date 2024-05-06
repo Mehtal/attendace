@@ -1,3 +1,7 @@
+#:import Rotation team.models.Rotation
+#:import Ligne ligne.models.Ligne
+#:import Driver driver.models.Driver
+#:import Supplier supplier.models.Supplier
 <TeamForm>:
   id:id_create_form
   spacing:30
@@ -9,31 +13,31 @@
   MDTextField:
     id: id_nom
     hint_text: "enter name"
-    text: root.nom
+    text: "" if not root.data else root.data["nom"]
   MDTextField:
     id: id_rotation
-    text : "" 
     hint_text: "add Rotation"
-    value: ""
-    on_focus: if self.focus : root.get_menu_list(self,root.rotation)
+    text : "" if not root.data else root.data["nom_rotation"]
+    value: "" if not root.data else root.data["code_rotation"]
+    on_focus: if self.focus : root.get_menu_list(self,Rotation)
   MDTextField:
     id: id_ligne
     hint_text: "add ligne"
-    text : "" 
-    value: ""
-    on_focus: if self.focus : root.get_menu_list(self,root.ligne)
+    text : "" if not root.data else root.data["nom_ligne"]
+    value: "" if not root.data else root.data["code_ligne"]
+    on_focus: if self.focus : root.get_menu_list(self,Ligne)
   MDTextField:
     id: id_chauffeur
     hint_text: "add chauffeur"
-    text : "" 
-    value: ""
-    on_focus: if self.focus : root.get_menu_list(self,root.chauffeur)
+    text : "" if not root.data else root.data["nom_chauffeur"]
+    value: "" if not root.data else root.data["code_chauffeur"]
+    on_focus: if self.focus : root.get_menu_list(self,Driver)
   MDTextField:
     id: id_fourniseur
+    disabled : True
     hint_text: "add fourniseur"
     text : "" 
     value: ""
-    on_focus: if self.focus : root.get_menu_list(self,root.fourniseur)
 
   MDBoxLayout
     id: id_btn_list

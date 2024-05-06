@@ -20,10 +20,14 @@ class RotationForm(MDBoxLayout):
 class TeamForm(MDBoxLayout):
     code = StringProperty()
     nom = StringProperty()
-    rotation = Rotation
-    ligne = Ligne
-    chauffeur = Driver
-    fourniseur = Supplier
+    data = ObjectProperty()
+
+    def __init__(self, **kwargs) -> None:
+        super().__init__(**kwargs)
+        self.ids.id_chauffeur.bind(value=self.get_fournisseur)
+
+    def load_data(self, data):
+        self.data = data
 
     def get_menu_list(self, caller, model):
         menu_list = [
@@ -45,21 +49,14 @@ class TeamForm(MDBoxLayout):
         self.menu.bind()
         self.menu.open()
 
-    def set_items(self, x, field):
+    def set_items(self, x, field) -> None:
         field.text = x["nom"]
         field.value = x["code"]
         self.menu.dismiss()
 
-    # def set_item(self, fourniseur):
-    #     self.fourniseur = fourniseur
-    #     self.code_fourniseur = fourniseur["code"]
-    #     self.ids.id_fourniseur.text = fourniseur["nom"]
-    #     self.menu.dismiss()
-    # def load_data(self, data):
-    #     print(f"Loading data : {data}")
-    #     self.code = str(data["code"])
-    #     self.nom = data["nom"]
-    #     self.rotation = Rotation()._read(data["code_rotation"])
-    #     self.ligne = Ligne()._read(data["code_ligne"])
-    #     self.chauffeur = Driver()._read(data["code_chauffeur"])
-    #     self.fourniseur = Supplier()._read(data["code_fourniseur"])
+    def get_fournisseur(self, driver_widget, widget_text) -> None:
+        supplier_widget = self.ids.id_fourniseur
+        driver = Driver()._read(driver_widget.value)
+        supplier = Supplier()._read(driver["code_fourniseur"])
+        supplier_widget.text = supplier["nom"]
+        supplier_widget.value = str(supplier["code"])

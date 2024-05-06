@@ -8,13 +8,29 @@
       width: 1 
       points:(self.x,self.height,self.x,self.y,self.width,self.y,self.width,self.height)
   CLabel:
-    id : code
+    id : id_code
     text: str(self.parent.code)
     adaptive_width: True
     size_hint_x:0.5
   CLabel:
-    id : nom
+    id : id_nom
     text: self.parent.nom
+    size_hint_x: 2
+  CLabel:
+    id : id_rotation
+    text: str(root.rotation)
+    size_hint_x: 2
+  CLabel:
+    id : id_ligne
+    text: str(root.ligne)
+    size_hint_x: 2
+  CLabel:
+    id : id_chauffeur
+    text: str(root.driver)
+    size_hint_x: 2
+  CLabel:
+    id : id_fournisseur
+    text: str(root.supplier)
     size_hint_x: 2
   MDAnchorLayout:
     spacing:10
@@ -35,7 +51,7 @@
         pos_hint:{"center_y":0.5}
         md_bg_color:"orange"
         icon: "text-box-edit"
-        on_release: 
+        on_release: app.root.current_screen.open_modal(id_code.text,update=True)
       MDIconButton:
         icon:"delete"
         pos_hint:{"center_y":0.5}
@@ -140,6 +156,27 @@
             text: "NOM"
             size_hint_x:2
             bold:True
+          CLabel:
+            color: "white"
+            text: "Rotation"
+            size_hint_x:2
+            bold:True
+          CLabel:
+            color: "white"
+            text: "Ligne"
+            size_hint_x:2
+            bold:True
+          CLabel:
+            color: "white"
+            text: "Chauffeur"
+            size_hint_x:2
+            bold:True
+          CLabel:
+            color: "white"
+            text: "Fourniseur"
+            size_hint_x:2
+            bold:True
+
           CLabel:
             color: "white"
             text: "ACTIONS"
