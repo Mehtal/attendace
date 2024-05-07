@@ -10,6 +10,7 @@
   size_hint:0.6, None
   height:self.minimum_height
   padding:50
+  code : "" if not root.data else str(root.data["code"])
   MDTextField:
     id: id_nom
     hint_text: "enter name"

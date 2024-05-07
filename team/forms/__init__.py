@@ -26,7 +26,7 @@ class TeamForm(MDBoxLayout):
         super().__init__(**kwargs)
         self.ids.id_chauffeur.bind(value=self.get_fournisseur)
 
-    def load_data(self, data):
+    def fill_data(self, data):
         self.data = data
 
     def get_menu_list(self, caller, model):

@@ -21,9 +21,6 @@ class TeamDataRow(RecycleDataViewBehavior, MDBoxLayout):
     driver = StringProperty()
     supplier = StringProperty()
 
-    def on_delete(self, model):
-        model._delete(self.code)
-
     def refresh_view_attrs(self, rv, index, data):
         self.index = index
         self.code = data["code"]
@@ -76,7 +73,7 @@ class TeamScreen(Screen):
             cursor = self.model().db.cursor
             cursor.execute(query, (code,))
             data = cursor.fetchone()
-            form.load_data(data)
+            form.fill_data(data)
             button = MDRectangleFlatButton(
                 text="UPDATE", on_release=lambda x: self.update_team(form)
             )
@@ -104,18 +101,18 @@ class TeamScreen(Screen):
         rotation._create()
         self.dialog_close()
 
-    # def update_team(self, form):
-    #     code = form.code
-    #     nom = form.ids.id_nom.text
-    #     rotation = form.ids.id_rotation.value
-    #     ligne = form.ids.id_ligne.value
-    #     chauffeur = form.ids.id_chauffeur.value
-    #     fourniseur = form.ids.id_fourniseur.value
-    #     team = self.model()
-    #     team.set_data(nom, rotation, ligne, chauffeur, fourniseur)
-    #     team._update(code)
-    #     self.rv.load_data(self.model)
-    #     self.dialog_close()
+    def update_team(self, form):
+        code = form.code
+        nom = form.ids.id_nom.text
+        rotation = form.ids.id_rotation.value
+        ligne = form.ids.id_ligne.value
+        chauffeur = form.ids.id_chauffeur.value
+        fourniseur = form.ids.id_fourniseur.value
+        team = self.model()
+        team.set_data(nom, rotation, ligne, chauffeur, fourniseur)
+        team._update(code)
+        self.rv.load_data(self.model)
+        self.dialog_close()
 
     def create_team(self, form):
         nom = form.ids.id_nom.text
@@ -128,6 +125,10 @@ class TeamScreen(Screen):
         team._create()
         self.rv.load_data(self.model)
         self.dialog_close()
+
+    def delete_team(self, code):
+        self.model()._delete(code)
+        self.rv.load_data(self.model)
 
     def dialog_close(self, *args):
         self.dialog.dismiss()
