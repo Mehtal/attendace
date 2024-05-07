@@ -1,13 +1,18 @@
+import os
+
 from kivy.core.text import LabelBase
-from kivy.uix.screenmanager import Screen, ScreenManager
+from kivy.uix.screenmanager import ScreenManager
+from kivy.lang.builder import Builder
+
 from kivymd.app import MDApp
 from kivymd.font_definitions import theme_font_styles
 
-from components import FlatButton
 from driver import DriverScreen
 from supplier import SupplierDetailScreen, SupplierScreen
 from ligne import LigneScreen
-from team.screens import TeamScreen
+from team import TeamScreen
+
+from components import Sidebar
 
 
 class MainApp(MDApp):
@@ -31,6 +36,14 @@ class MainApp(MDApp):
 
         self.theme_cls.theme_style = "Dark"
         self.theme_cls.primary_palette = "Blue"
+
+        # Load kiv files
+        kv_directory = "kv"
+        for filename in os.listdir(kv_directory):
+            if filename.endswith(".kv"):
+                file_path = os.path.join(kv_directory, filename)
+                print(file_path)
+                Builder.load_file(file_path)
 
         sm = ScreenManager()
         sm.add_widget(TeamScreen(name="team"))
