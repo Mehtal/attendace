@@ -6,17 +6,14 @@ from kivymd.uix.button import MDRectangleFlatButton
 from kivymd.uix.dialog import MDDialog
 from kivymd.uix.boxlayout import MDBoxLayout
 
-from ligne.models import Ligne
-from ligne.forms import LigneForm
+from rotation.models import Rotation
+from rotation.forms import RotationForm
 
 
-class LigneDataRow(RecycleDataViewBehavior, MDBoxLayout):
+class RotationDataRow(RecycleDataViewBehavior, MDBoxLayout):
     index = 0
     code = StringProperty()
     nom = StringProperty()
-
-    def delete_data(self, model):
-        model._delete(self.code)
 
     def refresh_view_attrs(self, rv, index, data):
         self.index = index
@@ -25,57 +22,57 @@ class LigneDataRow(RecycleDataViewBehavior, MDBoxLayout):
         super().refresh_view_attrs(rv, index, data)
 
 
-class LigneScreen(Screen):
-    model = Ligne
+class RotationScreen(Screen):
+    model = Rotation
     dialog = None
-    viewclass = LigneDataRow
+    viewclass = RotationDataRow
 
     def on_kv_post(self, base_widget):
         self.rv = self.ids.id_rv
-        self.rv.viewclass = LigneDataRow
+        self.rv.viewclass = RotationDataRow
         self.rv.load_data(self.model)
 
     def open_modal(self, code: str = "", update: bool = False):
         if not self.dialog:
             self.dialog = MDDialog(
-                title="CREATE Ligne",
+                title="CREATE Rotation",
                 type="custom",
-                content_cls=LigneForm(),
+                content_cls=RotationForm(),
             )
         form = self.dialog.content_cls
         if not update:
             button = MDRectangleFlatButton(
-                text="CREATE", on_release=lambda x: self.create_ligne(form)
+                text="CREATE", on_release=lambda x: self.create_rotation(form)
             )
             form.ids.id_btn_list.add_widget(button)
         else:
-            self.dialog.title = "UPDATE LIGNE"
+            self.dialog.title = "UPDATE Rotation"
             data = self.model()._read(int(code))
-            form.load_data(data)
+            form.fill_data(data)
             button = MDRectangleFlatButton(
-                text="UPDATE", on_release=lambda x: self.update_ligne(form)
+                text="UPDATE", on_release=lambda x: self.update_rotation(form)
             )
             form.ids.id_btn_list.add_widget(button)
         self.dialog.open()
 
-    def create_ligne(self, form):
+    def create_rotation(self, form):
         nom = form.ids.id_nom.text
-        ligne = self.model()
-        ligne.set_data(nom)
-        ligne._create()
+        rotation = self.model()
+        rotation.set_data(nom)
+        rotation._create()
         self.rv.load_data(self.model)
         self.dialog_close()
 
-    def update_ligne(self, form):
+    def update_rotation(self, form):
         code = form.code
         nom = form.ids.id_nom.text
-        ligne = self.model()
-        ligne.set_data(nom)
-        ligne._update(code)
+        rotation = self.model()
+        rotation.set_data(nom)
+        rotation._update(code)
         self.rv.load_data(self.model)
         self.dialog_close()
 
-    def delete_ligne(self, code: str) -> None:
+    def delete_rotation(self, code: str) -> None:
         self.model()._delete(code)
         self.rv.load_data(self.model)
 

@@ -3,18 +3,7 @@ from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.menu import MDDropdownMenu
 
 from driver.models import Driver
-from ligne.models import Ligne
 from supplier.models import Supplier
-from team.models import Rotation
-
-
-class RotationForm(MDBoxLayout):
-    code = StringProperty()
-    nom = StringProperty()
-
-    def load_rotation(self, data):
-        self.code = str(data["code"])
-        self.nom = str(data["nom"])
 
 
 class TeamForm(MDBoxLayout):

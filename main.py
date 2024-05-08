@@ -11,7 +11,7 @@ from driver import DriverScreen
 from supplier import SupplierDetailScreen, SupplierScreen
 from ligne import LigneScreen
 from team import TeamScreen
-
+from rotation import RotationScreen
 from components import Sidebar
 
 
@@ -42,16 +42,15 @@ class MainApp(MDApp):
         for filename in os.listdir(kv_directory):
             if filename.endswith(".kv"):
                 file_path = os.path.join(kv_directory, filename)
-                print(file_path)
                 Builder.load_file(file_path)
 
         sm = ScreenManager()
+        sm.add_widget(SupplierScreen(name="sup"))
         sm.add_widget(TeamScreen(name="team"))
+        sm.add_widget(RotationScreen(name="rotation"))
         sm.add_widget(LigneScreen(name="ligne"))
-        self.supplier_screen = SupplierScreen(name="sup")
-        sm.add_widget(self.supplier_screen)
-        sm.add_widget(SupplierDetailScreen(name="sup-detail"))
         sm.add_widget(DriverScreen(name="driver"))
+        sm.add_widget(SupplierDetailScreen(name="sup-detail"))
         return sm
 
 

@@ -17,7 +17,7 @@ class DriverProtocol:
         nom TEXT NOT NULL,
         prenom TEXT NOT NULL,
         code_fourniseur INTEGER ,
-        FOREIGN KEY (code_fourniseur) REFERENCES fourniseur (code)
+        FOREIGN KEY (code_fourniseur) REFERENCES fourniseur (code) ON DELETE CASCADE
         );
         """
         self.cursor.execute(query)

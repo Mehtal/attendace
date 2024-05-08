@@ -1,4 +1,4 @@
-#:import Rotation team.models.Rotation
+#:import Rotation rotation.models.Rotation
 #:import Ligne ligne.models.Ligne
 #:import Driver driver.models.Driver
 #:import Supplier supplier.models.Supplier
@@ -48,30 +48,5 @@
     MDRectangleFlatButton:
       text: "Cancel"
       on_release: app.root.current_screen.dialog_close()
-
-
-<RotationForm>:
-  id:id_rotation_form
-  spacing:50
-  pos_hint:{"center_x":0.5,"center_y":0.5}
-  orientation:"vertical"
-  size_hint:0.6, None
-  height:self.minimum_height
-  padding:50
-  MDTextField:
-    id: id_nom
-    hint_text: "enter name"
-    text: root.nom
-  MDBoxLayout
-    id: id_btn_list
-    pos_hint:{"right":1}
-    adaptive_size: True
-    spacing:30
-    MDRectangleFlatButton:
-      text: "Cancel"
-      on_release: app.root.current_screen.dialog_close()
-
-
-
 
 

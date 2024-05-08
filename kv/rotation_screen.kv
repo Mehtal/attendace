@@ -1,4 +1,4 @@
-<SupplierDataRow>:
+<RotationDataRow>:
   bold: True
   md_bg_color: 1,1,1,1
   canvas:
@@ -16,13 +16,6 @@
     id : nom
     text: self.parent.nom
     size_hint_x: 2
-  CLabel:
-    text: self.parent.telephone 
-    size_hint_x: 2
-  CLabel:
-    size_hint_x: 2
-    id: data_cell
-    text: self.parent.adresse
   MDAnchorLayout:
     spacing:10
     size_hint_x:2
@@ -36,22 +29,22 @@
         pos_hint:{"center_y":0.5}
         md_bg_color:"green"
         icon: "eye"
-        on_release: app.root.current_screen.detail_supplier(code.text)
+        on_release: 
 
       MDIconButton:
         pos_hint:{"center_y":0.5}
         md_bg_color:"orange"
         icon: "text-box-edit"
-        on_release: app.root.current_screen.open_modal(code=code.text,update=True)
+        on_release: app.root.current_screen.open_modal(code.text,update=True)
       MDIconButton:
         icon:"delete"
         pos_hint:{"center_y":0.5}
         md_bg_color:"red"
-        on_release: app.root.current_screen.delete_supplier(code.text)
- 
-<SupplierScreen>:
-  name: "supplier"
-  id: id_supplier_screen
+        on_release: app.root.current_screen.delete_rotation(code.text)
+
+<RotationScreen>:
+  name: "rotation"
+  id: id_rotation_screen
   MDBoxLayout:
     id : id_main_wrapper
     orientation: "horizontal"
@@ -80,7 +73,7 @@
         MDLabel:
           color: "black"
           font_name: "HackNerdFont"
-          text: "󱚞 SUPPLIER SCREEN"
+          text: "󱚞 rotation SCREEN"
           font_size: "30"
           bold:True
           italic:True
@@ -88,7 +81,7 @@
 
         MDRoundFlatIconButton:
           id: id_toggle_create_button
-          text: "Supplier"
+          text: "rotation"
           icon: "plus"
           bold:True
           italic:True
@@ -131,17 +124,8 @@
             bold:True
           CLabel:
             color: "white"
-            text: "TELEPHONE"
-            size_hint_x:2
-            bold:True
-          CLabel:
-            color: "white"
-            text: "ADRESSE"
-            size_hint_x:2
-            bold:True
-          CLabel:
-            color: "white"
             text: "ACTIONS"
+            haligne: "left"
             size_hint_x:2
             bold:True
 

@@ -1,0 +1,25 @@
+<RotationForm>:
+  id:id_create_form
+  spacing:50
+  pos_hint:{"center_x":0.5,"center_y":0.5}
+  orientation:"vertical"
+  size_hint:0.6, None
+  height:self.minimum_height
+  padding:50
+  MDTextField:
+    id: id_nom
+    hint_text: "example : 1x8 2x8 3x8"
+    text: root.nom
+  MDBoxLayout:
+    id: id_btn_list
+    pos_hint:{"right":1}
+    adaptive_size: True
+    spacing:30
+    MDRectangleFlatButton:
+      text: "Cancel"
+      on_release: app.root.current_screen.dialog_close()
+
+
+
+
+

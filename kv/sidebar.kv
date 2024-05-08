@@ -25,19 +25,19 @@
       text: "FOURNISEUR"
       on_release: app.root.current = "sup"
     FlatButton:
-      text: "CHAUFFEUR"
-      on_release: app.root.current = "driver"
-    FlatButton:
       text: "EQUIPE"
       on_release: app.root.current = "team"
     FlatButton:
-      text: "VEHICULE"
-      on_release: print(self.size)
+      text: "Rotation"
+      on_release: app.root.current = "rotation"
     FlatButton:
       text: "LIGNE"
       on_release: app.root.current = "ligne"
     FlatButton:
-      text: "CART"
+      text: "CHAUFFEUR"
+      on_release: app.root.current = "driver"
+    FlatButton:
+      text: "VEHICULE"
       on_release: print(self.size)
     FlatButton:
       text: "FACTURE"

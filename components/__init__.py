@@ -4,7 +4,6 @@ from kivy.metrics import dp
 from kivy.properties import NumericProperty
 from kivymd.uix.button import MDRectangleFlatButton
 from kivymd.uix.floatlayout import MDFloatLayout
-from kivymd.uix.label import MDLabel
 from kivymd.uix.recycleview import MDRecycleView
 
 

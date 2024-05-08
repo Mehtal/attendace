@@ -7,8 +7,9 @@ from kivymd.uix.dialog import MDDialog
 from driver.models import Driver
 from ligne.models import Ligne
 from supplier.models import Supplier
-from team.models import Rotation, Team
-from team.forms import TeamForm, RotationForm
+from team.models import Team
+from rotation.models import Rotation
+from team.forms import TeamForm
 from kivy.uix.recycleview.views import RecycleDataViewBehavior
 
 
