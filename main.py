@@ -12,6 +12,7 @@ from supplier import SupplierDetailScreen, SupplierScreen
 from ligne import LigneScreen
 from team import TeamScreen
 from rotation import RotationScreen
+from card import CardScreen
 from components import Sidebar
 
 
@@ -50,6 +51,7 @@ class MainApp(MDApp):
         sm.add_widget(RotationScreen(name="rotation"))
         sm.add_widget(LigneScreen(name="ligne"))
         sm.add_widget(DriverScreen(name="driver"))
+        sm.add_widget(CardScreen(name="card"))
         sm.add_widget(SupplierDetailScreen(name="sup-detail"))
         return sm
 

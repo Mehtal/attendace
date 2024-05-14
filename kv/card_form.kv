@@ -1,0 +1,34 @@
+#:import Team team.models.Team
+<CardForm>:
+  id:id_create_form
+  spacing:50
+  pos_hint:{"center_x":0.5,"center_y":0.5}
+  orientation:"vertical"
+  size_hint:0.6, None
+  height:self.minimum_height
+  padding:50
+  MDTextField:
+    id: id_code
+    hint_text: "numero de la cart"
+    text: root.code
+    required: True
+  MDTextField:
+    id: id_equipe
+    hint_text: "select team"
+    text: "" if not root.equipe else root.equipe["nom"]
+    value: "" if not root.equipe else root.equipe["code"]
+    on_focus: root.get_menu_list(self,Team)
+    required: True
+  MDBoxLayout:
+    id: id_btn_list
+    pos_hint:{"right":1}
+    adaptive_size: True
+    spacing:30
+    MDRectangleFlatButton:
+      text: "Cancel"
+      on_release: app.root.current_screen.dialog_close()
+
+
+
+
+
