@@ -86,8 +86,12 @@ def read_qr_code():
             barcode_data = barcode.data.decode("utf-8")
             barcode_type = barcode.type
 
+            x, y, w, h = barcode.rect
+            cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
+
             # Print the barcode data and type
             print(f"Found {barcode_type}: {barcode_data}")
+            return barcode_data
 
         # Display the frame
         cv2.imshow("QR Code Scanner", frame)

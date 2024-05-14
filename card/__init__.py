@@ -35,7 +35,8 @@ class CardScreen(Screen):
         self.rv.load_data(self.model)
 
     def edit_card(self):
-        read_qr_code()
+        code = read_qr_code()
+        open_modal(code=code, update=True)
 
     def edit_card_from_img(self):
         f = FileManager()
