@@ -103,3 +103,4 @@ def read_qr_code():
     # Release the webcam and close OpenCV windows
     cap.release()
     cv2.destroyAllWindows()
+    return None
