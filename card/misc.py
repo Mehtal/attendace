@@ -83,16 +83,17 @@ def read_qr_code():
 
         # Loop over the detected barcodes
         for barcode in barcodes:
-            # Extract barcode data and type
-            barcode_data = barcode.data.decode("utf-8")
-            barcode_type = barcode.type
+            if barcode != []:
+                # Extract barcode data and type
+                barcode_data = barcode.data.decode("utf-8")
+                barcode_type = barcode.type
 
-            x, y, w, h = barcode.rect
-            cv2.rectangle(frame, (x, y), (x + w, y + h), (255, 255, 0), 9)
+                x, y, w, h = barcode.rect
+                cv2.polylines(frame, (x, y), (x + w, y + h), (255, 255, 0), 5)
 
-            # Print the barcode data and type
-            print(f"Found {barcode_type}: {barcode_data}")
-            return barcode_data
+                # Print the barcode data and type
+                print(f"Found {barcode_type}: {barcode_data}")
+                return barcode_data
 
         # Display the frame
         cv2.imshow("QR Code Scanner", frame)
