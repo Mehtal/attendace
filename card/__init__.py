@@ -35,13 +35,11 @@ class CardScreen(Screen):
         self.rv.load_data(self.model)
 
     def edit_card(self):
-        return read_qr_code()
+        read_qr_code()
 
     def edit_card_from_img(self):
         f = FileManager()
-        print(f.select_path(), "1")
         f.file_manager_open()
-        print(f.select_path())
 
     def open_modal(self, code: str = "", update: bool = False):
         if not self.dialog:
