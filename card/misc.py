@@ -79,6 +79,7 @@ def read_qr_code():
 
         # Detect barcodes in the frame
         barcodes = pyzbar.decode(frame)
+        print(barcodes)
 
         # Loop over the detected barcodes
         for barcode in barcodes:
@@ -87,7 +88,7 @@ def read_qr_code():
             barcode_type = barcode.type
 
             x, y, w, h = barcode.rect
-            cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
+            cv2.rectangle(frame, (x, y), (x + w, y + h), (255, 255, 0), 9)
 
             # Print the barcode data and type
             print(f"Found {barcode_type}: {barcode_data}")
