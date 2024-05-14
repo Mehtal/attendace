@@ -90,6 +90,9 @@ def read_qr_code():
 
                 # Print the barcode data and type
                 print(f"Found {barcode_type}: {barcode_data}")
+                cv2.destroyAllWindows()
+                cap.release()
+                cv2.destroyAllWindows()
                 return barcode_data
 
         # Display the frame
