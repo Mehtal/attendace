@@ -8,6 +8,7 @@ from kivy.core.window import Window
 from kivy.config import Config
 
 from card.misc import read_qr_code
+from datetime import timezone, datetime
 
 Window.size = (360, 640)
 Config.set("graphics", "width", "360")
@@ -108,7 +109,12 @@ class ThirdScreen(Screen):
 
     def pointage(self, instance):
         card = read_qr_code()
-        print(f"Pointage {card} at : {instance.text}")
+        entery_time = datetime.strptime(instance.texta, "%H:%M").time()
+        now = datetime.now().time()
+        if entery_time < now:
+            diffrence = now - entery_time
+
+        print(f"Pointage {card} at : {instance.text}  you are late by  {diffrence}")
 
 
 class PointageApp(MDApp):
