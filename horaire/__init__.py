@@ -5,88 +5,84 @@ from kivy.properties import StringProperty, ObjectProperty
 from kivymd.uix.button import MDRectangleFlatButton
 from kivymd.uix.dialog import MDDialog
 from kivymd.uix.boxlayout import MDBoxLayout
-from kivymd.uix.filemanager import MDFileManager
-
-from card.models import Card
-from card.forms import CardForm
-from card.misc import create_qr_code, read_qr_code, FileManager
-from team.models import Team
 
 
-class CardDataRow(RecycleDataViewBehavior, MDBoxLayout):
+from horaire.models import Horaire
+from horaire.forms import HoraireForm
+from rotation.models import Rotation
+
+
+class HoraireDataRow(RecycleDataViewBehavior, MDBoxLayout):
     index = 0
     code = StringProperty()
-    equipe = ObjectProperty()
+    entree = StringProperty()
+    sortie = StringProperty()
+    rotation = ObjectProperty()
 
     def refresh_view_attrs(self, rv, index, data):
         self.index = index
         self.code = data["code"]
-        self.equipe = Team()._read(data["code_equipe"])
+        self.entree = data["entree"]
+        self.sortie = data["sortie"]
+        self.rotation = Rotation()._read(data["code_rotation"])
         super().refresh_view_attrs(rv, index, data)
 
 
-class CardScreen(Screen):
-    model = Card
+class HoraireScreen(Screen):
+    model = Horaire
     dialog = None
-    viewclass = CardDataRow
-    file_manager = FileManager
+    viewclass = HoraireDataRow
 
     def on_kv_post(self, base_widget):
         self.rv = self.ids.id_rv
-        self.rv.viewclass = CardDataRow
+        self.rv.viewclass = HoraireDataRow
         self.rv.load_data(self.model)
-
-    def edit_card(self):
-        code = read_qr_code()
-        self.open_modal(code=code, update=True)
-
-    def edit_card_from_img(self):
-        pass
 
     def open_modal(self, code: str = "", update: bool = False):
         if not self.dialog:
             self.dialog = MDDialog(
-                title="CREATE Card",
+                title="CREATE Horaire",
                 type="custom",
-                content_cls=CardForm(),
+                content_cls=HoraireForm(),
             )
         form = self.dialog.content_cls
         if not update:
             button = MDRectangleFlatButton(
-                text="CREATE", on_release=lambda x: self.create_card(form)
+                text="CREATE", on_release=lambda x: self.create_horaire(form)
             )
             form.ids.id_btn_list.add_widget(button)
-            rfid = create_qr_code()
-            form.code = rfid
         else:
-            self.dialog.title = "UPDATE Card"
+            self.dialog.title = "UPDATE Horaire"
             data = self.model()._read(int(code))
             form.load_data(data)
             button = MDRectangleFlatButton(
-                text="UPDATE", on_release=lambda x: self.update_card(form)
+                text="UPDATE", on_release=lambda x: self.update_horaire(form)
             )
             form.ids.id_btn_list.add_widget(button)
         self.dialog.open()
 
-    def create_card(self, form):
-        code = form.ids.id_code.text
-        code_equipe = form.ids.id_equipe.value
-        card = self.model()
-        card.set_data(code, code_equipe)
-        card._create()
+    def create_horaire(self, form):
+        entree = form.ids.id_entree.text
+        sortie = form.ids.id_sortie.text
+        code_rotation = form.ids.id_rotation.value
+        horaire = self.model()
+        horaire.set_data(entree, sortie, code_rotation)
+        horaire._create()
         self.rv.load_data(self.model)
         self.dialog_close()
 
-    def update_card(self, form):
+    def update_horaire(self, form):
         code = form.code
-        code_equipe = form.ids.id_equipe.value
-        card = self.model()
-        card.set_data(code, code_equipe)
-        card._update(code)
+        entree = form.ids.id_entree.text
+        sortie = form.ids.id_sortie.text
+        code_rotation = form.ids.id_rotation.value
+        horaire = self.model()
+        horaire.set_data(entree, sortie, code_rotation)
+        horaire._update(code)
         self.rv.load_data(self.model)
         self.dialog_close()
 
-    def delete_card(self, code: str) -> None:
+    def delete_horaire(self, code: str) -> None:
         self.model()._delete(code)
         self.rv.load_data(self.model)
 

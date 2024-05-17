@@ -1,7 +1,7 @@
 import sqlite3
 
 
-class RotationProtocol:
+class HoraireProtocol:
     conn = sqlite3.connect("sqlite.db")
     conn.row_factory = sqlite3.Row
     cursor = conn.cursor()
@@ -11,11 +11,13 @@ class RotationProtocol:
         self._table_create()
 
     def _table_create(self):
-        query: str = """
-        CREATE TABLE IF NOT EXISTS rotation (
+        query = """
+        CREATE TABLE IF NOT EXISTS horaire (
         code INTEGER PRIMARY KEY AUTOINCREMENT,
-        nom TEXT NOT NULL,
-        type_rotation TEXT NOT NULL
+        entree TEXT NOT NULL,
+        sortie TEXT NOT NULL,
+        code_rotation INTEGER,
+        FOREIGN KEY(code_rotation) REFERENCES rotation(code)
         );
         """
         self.cursor.execute(query)
@@ -24,56 +26,64 @@ class RotationProtocol:
     def _create(self, data: dict):
         try:
             with self.conn:
-                query: str = """
-                INSERT INTO rotation(nom, type_rotation)
-                VALUES(?, ?)
+                query = """
+                INSERT INTO horaire(entree, sortie, code_rotation)
+                VALUES(?, ?, ?)
                 """
                 self.cursor.execute(
                     query,
-                    (data["nom"], data["type_rotation"]),
+                    (
+                        data["entree"],
+                        data["sortie"],
+                        data["code_rotation"],
+                    ),
                 )
 
                 self.conn.commit()
-                lastrowid = self.cursor.lastrowid
-                created_rotation = self._read(lastrowid)
-                return created_rotation
+                lastrowid = str(self.cursor.lastrowid)
+                query = "SELECT * FROM horaire WHERE code=?"
+                cursor = self.cursor.execute(query, (lastrowid,))
+                created_horaire = cursor.fetchone()
+                return created_horaire
         except Exception as e:
             print(e)
 
     def _read(self, code: int):
-        query: str = "SELECT * FROM rotation WHERE code=?"
+        query = "SELECT * FROM horaire WHERE code=?"
         cursor = self.cursor.execute(query, (code,))
-        fetched_member = cursor.fetchone()
-        return fetched_member
+        fetched_horaire = cursor.fetchone()
+        return fetched_horaire
 
     def _update(self, code: int, data: dict):
         query = """
-        UPDATE rotation
-        SET nom = ?,
-            type_rotation = ?
+        UPDATE horaire
+        SET entree = ?,
+            sortie = ?,
+            code_rotation = ?
         WHERE code = ?
         """
         cursor = self.cursor.execute(
             query,
             (
-                data["nom"],
-                data["type_rotation"],
+                data["entree"],
+                data["sortie"],
+                data["code_rotation"],
                 code,
             ),
         )
         self.conn.commit()
-        updated_rotation = self._read(code)
-        return updated_rotation
+        updated_horaire = cursor.fetchone()
+        return updated_horaire
 
     def _delete(self, code: int):
-        query = "DELETE FROM rotation WHERE code=?;"
+        query = "DELETE FROM horaire WHERE code=?;"
         self.cursor.execute(query, (code,))
         self.conn.commit()
 
     def _list(self):
-        query: str = """
+        query = """
         SELECT *
-        FROM rotation
+        FROM horaire
         """
         cursor = self.cursor.execute(query)
         rows = cursor.fetchall()
@@ -83,11 +93,11 @@ class RotationProtocol:
         return data
 
 
-class Rotation:
+class Horaire:
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.data = {}
-        self.db = RotationProtocol()
+        self.db = HoraireProtocol()
 
     def _create(self):
         return self.db._create(self.data)
@@ -104,5 +114,14 @@ class Rotation:
     def _list(self):
         return self.db._list()
 
-    def set_data(self, nom, type_rotation):
-        self.data = {"nom": nom, "type_rotation": type_rotation}
+    def set_data(
+        self,
+        entree,
+        sortie,
+        code_rotation,
+    ):
+        self.data = {
+            "entree": entree,
+            "sortie": sortie,
+            "code_rotation": code_rotation,
+        }

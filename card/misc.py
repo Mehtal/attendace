@@ -4,7 +4,7 @@ import cv2
 from pyzbar import pyzbar
 import random
 import string
-
+from kivy.properties import ObjectProperty
 from kivymd.uix.filemanager import MDFileManager
 from kivymd.toast import toast
 
@@ -13,6 +13,7 @@ img_path = os.path.join(os.getcwd(), "img")
 
 class FileManager:
     selected_file = None
+    file = ObjectProperty()
 
     def __init__(self):
         self.manager_open = False

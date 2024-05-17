@@ -14,11 +14,13 @@ class RotationDataRow(RecycleDataViewBehavior, MDBoxLayout):
     index = 0
     code = StringProperty()
     nom = StringProperty()
+    type_rotation = StringProperty()
 
     def refresh_view_attrs(self, rv, index, data):
         self.index = index
         self.code = data["code"]
         self.nom = data["nom"]
+        self.type_rotation = data["type_rotation"]
         super().refresh_view_attrs(rv, index, data)
 
 
@@ -31,6 +33,7 @@ class RotationScreen(Screen):
         self.rv = self.ids.id_rv
         self.rv.viewclass = RotationDataRow
         self.rv.load_data(self.model)
+        print(f"inside rotationdatarow {self.rv.data}")
 
     def open_modal(self, code: str = "", update: bool = False):
         if not self.dialog:
@@ -57,8 +60,9 @@ class RotationScreen(Screen):
 
     def create_rotation(self, form):
         nom = form.ids.id_nom.text
+        type_rotation = form.ids.id_type_rotation.text
         rotation = self.model()
-        rotation.set_data(nom)
+        rotation.set_data(nom, type_rotation)
         rotation._create()
         self.rv.load_data(self.model)
         self.dialog_close()
@@ -66,8 +70,9 @@ class RotationScreen(Screen):
     def update_rotation(self, form):
         code = form.code
         nom = form.ids.id_nom.text
+        type_rotation = form.ids.id_type_rotation.text
         rotation = self.model()
-        rotation.set_data(nom)
+        rotation.set_data(nom, type_rotation)
         rotation._update(code)
         self.rv.load_data(self.model)
         self.dialog_close()

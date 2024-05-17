@@ -13,6 +13,7 @@ from ligne import LigneScreen
 from team import TeamScreen
 from rotation import RotationScreen
 from card import CardScreen
+from horaire import HoraireScreen
 from components import Sidebar
 
 
@@ -53,6 +54,7 @@ class MainApp(MDApp):
         sm.add_widget(DriverScreen(name="driver"))
         sm.add_widget(CardScreen(name="card"))
         sm.add_widget(SupplierDetailScreen(name="sup-detail"))
+        sm.add_widget(HoraireScreen(name="horaire"))
         return sm
 
 

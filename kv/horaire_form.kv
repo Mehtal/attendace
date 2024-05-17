@@ -1,0 +1,42 @@
+#:import Rotation rotation.models.Rotation
+<HoraireForm>:
+  id: id_create_form
+  spacing: 50
+  pos_hint: {"center_x": 0.5, "center_y": 0.5}
+  orientation: "vertical"
+  size_hint: 0.6, None
+  height: self.minimum_height
+  padding: 50
+
+ 
+  MDTextField:
+    id: id_entree
+    hint_text: "Enter entree"
+    text: root.entree
+    required: True
+    on_focus: if self.focus: root.show_time_picker(self)
+
+  MDTextField:
+    id: id_sortie
+    hint_text: "Enter sortie"
+    text: root.sortie
+    required: True
+    on_focus: if self.focus: root.show_time_picker(self)
+
+  MDTextField:
+    id: id_rotation
+    hint_text: "Select rotation"
+    text: "" if not root.code_rotation else root.code_rotation["nom"]
+    value: "" if not root.code_rotation else root.code_rotation["code"]
+    on_focus: root.get_rotation_list(self, Rotation)
+    required: True
+
+  MDBoxLayout:
+    id: id_btn_list
+    pos_hint: {"right": 1}
+    adaptive_size: True
+    spacing: 30
+
+    MDRectangleFlatButton:
+      text: "Cancel"
+      on_release: app.root.current_screen.dialog_close()

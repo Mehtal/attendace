@@ -16,6 +16,10 @@
     id : nom
     text: self.parent.nom
     size_hint_x: 2
+  CLabel:
+    id : type_rotation
+    text: self.parent.type_rotation
+    size_hint_x: 2
   MDAnchorLayout:
     spacing:10
     size_hint_x:2
@@ -78,6 +82,20 @@
           bold:True
           italic:True
           
+        MDRoundFlatIconButton:
+          id: id_toggle_create_button
+          text: "Horaire"
+          icon: "plus"
+          bold:True
+          italic:True
+          font_size: 22
+          font_name: "HackNerdFont"
+          text_color: "white"
+          icon_color:"white"
+          line_color: "green"
+          md_bg_color: "green"
+          padding:[25,15,25,15]
+          on_release: app.root.current = "horaire" 
 
         MDRoundFlatIconButton:
           id: id_toggle_create_button
