@@ -7,6 +7,8 @@ from kivymd.uix.button import MDRectangleFlatButton
 from kivy.core.window import Window
 from kivy.config import Config
 
+from card.misc import read_qr_code
+
 Window.size = (360, 640)
 Config.set("graphics", "width", "360")
 Config.set("graphics", "height", "640")
@@ -100,8 +102,13 @@ class ThirdScreen(Screen):
                     font_size=24,
                     theme_text_color="Custom",
                     text_color="white",
+                    on_release=self.pointage,
                 )
             )
+
+    def pointage(self, instance):
+        card = read_qr_code()
+        print(f"Pointage {card} at : {instance.text}")
 
 
 class PointageApp(MDApp):
