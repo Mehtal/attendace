@@ -111,9 +111,7 @@ class ThirdScreen(Screen):
         card = read_qr_code()
         entery_time = datetime.strptime(instance.text, "%H:%M").time()
         now = datetime.now().time()
-        if entery_time < now:
-            diffrence = now - entery_time
-
+        diffrence = now - entery_time
         print(f"Pointage {card} at : {instance.text}  you are late by  {diffrence}")
 
 
