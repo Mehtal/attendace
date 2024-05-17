@@ -109,7 +109,7 @@ class ThirdScreen(Screen):
 
     def pointage(self, instance):
         card = read_qr_code()
-        entery_time = datetime.strptime(instance.texta, "%H:%M").time()
+        entery_time = datetime.strptime(instance.text, "%H:%M").time()
         now = datetime.now().time()
         if entery_time < now:
             diffrence = now - entery_time
