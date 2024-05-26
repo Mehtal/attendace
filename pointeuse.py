@@ -1,6 +1,8 @@
+from time import time
 from kivy.uix.screenmanager import Screen, ScreenManager
 from kivymd.app import MDApp
 from kivy.lang.builder import Builder
+from pointage.models import Pointage
 from rotation.models import Rotation
 from horaire.models import Horaire
 from kivymd.uix.button import MDRectangleFlatButton
@@ -8,6 +10,7 @@ from kivy.core.window import Window
 from kivy.config import Config
 
 from card.misc import read_qr_code
+from card.models import Card
 from datetime import timezone, datetime
 
 Window.size = (360, 640)
@@ -84,11 +87,58 @@ class ExitScreen(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         rotation = Rotation()._list()
-        print(rotation)
+        box = self.ids.id_exit
+        for item in rotation:
+            box.add_widget(
+                MDRectangleFlatButton(
+                    text=item["nom"],
+                    id=item["code"],
+                    size_hint=(1, 1),
+                    md_bg_color="#3498db",
+                    font_size=24,
+                    on_release=self.get_horaire,
+                    theme_text_color="Custom",
+                    text_color="white",
+                )
+            )
+
+    def get_horaire(self, instance):
+        horaire_list = Horaire()._list()
+        data = []
+        for horaire in horaire_list:
+            if horaire["code_rotation"] == instance.id:
+                data.append(horaire["sortie"])
+
+        second = self.manager.get_screen("second")
+        second.add_bttons(data)
+        self.manager.current = "second"
 
 
 class SecondScreen(Screen):
-    pass
+
+    def add_bttons(self, data):
+        for item in data:
+            self.ids.main.add_widget(
+                MDRectangleFlatButton(
+                    text=item,
+                    size_hint=(1, 1),
+                    md_bg_color="red",
+                    font_size=24,
+                    theme_text_color="Custom",
+                    text_color="white",
+                    on_release=self.pointage,
+                )
+            )
+
+    def pointage(self, instance):
+        # card = read_qr_code()
+        card = Card()._read("3581753449")["code"]
+        timestamp = datetime.now()
+        pointage = Pointage()
+        pointage.set_data(card, timestamp)
+        pointage._create()
+        print(instance, "************")
+        self.manager.current = "first"
 
 
 class ThirdScreen(Screen):
@@ -99,7 +149,7 @@ class ThirdScreen(Screen):
                 MDRectangleFlatButton(
                     text=item,
                     size_hint=(1, 1),
-                    md_bg_color="#3498db",
+                    md_bg_color="#04980b",
                     font_size=24,
                     theme_text_color="Custom",
                     text_color="white",
@@ -108,11 +158,14 @@ class ThirdScreen(Screen):
             )
 
     def pointage(self, instance):
-        card = read_qr_code()
-        entery_time = datetime.strptime(instance.text, "%H:%M").time()
-        now = datetime.now().time()
-        diffrence = now - entery_time
-        print(f"Pointage {card} at : {instance.text}  you are late by  {diffrence}")
+        # card = read_qr_code()
+        card = Card()._read("8240548397")["code"]
+        timestamp = datetime.now()
+        pointage = Pointage()
+        pointage.set_data(card, timestamp, entring=1)
+        print(pointage.data)
+        pointage._create()
+        self.manager.current = "first"
 
 
 class PointageApp(MDApp):

@@ -1,7 +1,7 @@
 import sqlite3
 
 
-class LigneProtocol:
+class PointageProtocol:
     conn = sqlite3.connect("sqlite.db")
     conn.row_factory = sqlite3.Row
     cursor = conn.cursor()
@@ -11,11 +11,13 @@ class LigneProtocol:
         self._table_create()
 
     def _table_create(self):
-        query: str = """
-        CREATE TABLE IF NOT EXISTS ligne(
+        query = """
+        CREATE TABLE IF NOT EXISTS pointage (
         code INTEGER PRIMARY KEY AUTOINCREMENT,
-        nom TEXT NOT NULL,
-        prix INTEGER NOT NULL
+        card INTEGER NOT NULL,
+        timestamp TEXT NOT NULL,
+        entring INTEGER DEFAULT 0,
+        FOREIGN KEY(card) REFERENCES card(code)
         );
         """
         self.cursor.execute(query)
@@ -24,57 +26,70 @@ class LigneProtocol:
     def _create(self, data: dict):
         try:
             with self.conn:
-                query: str = """
-                INSERT INTO ligne(nom,prix)
-                VALUES(?,?)
+                query = """
+                INSERT INTO pointage(card, timestamp,entring)
+                VALUES(?, ?,?)
                 """
                 self.cursor.execute(
                     query,
-                    (data["nom"], data["prix"]),
+                    (
+                        data["card"],
+                        data["timestamp"].strftime("%Y-%m-%d %H:%M:%S"),
+                        data["entring"],
+                    ),
                 )
 
                 self.conn.commit()
-                query = "SELECT nom,prix / 100.0  FROM ligne WHERE code=?"
                 lastrowid = str(self.cursor.lastrowid)
+                query = "SELECT * FROM pointage WHERE code=?"
                 cursor = self.cursor.execute(query, (lastrowid,))
-                created_ligne = cursor.fetchone()
-                return created_ligne
-
+                created_pointage = cursor.fetchone()
+                return created_pointage
         except Exception as e:
             print(e)
 
     def _read(self, code: int):
-        query = "SELECT code,nom,prix / 100.0 AS prix FROM ligne WHERE code=?"
+        query = "SELECT * FROM pointage WHERE code=?"
         cursor = self.cursor.execute(query, (code,))
-        fetched_ligne = cursor.fetchone()
-        return fetched_ligne
+        fetched_pointage = cursor.fetchone()
+        if fetched_pointage:
+            fetched_pointage["timestamp"] = datetime.strptime(
+                fetched_pointage["timestamp"], "%Y-%m-%d %H:%M:%S"
+            )
+        return fetched_pointage
 
     def _update(self, code: int, data: dict):
         query = """
-        UPDATE ligne
-        SET nom = ?
+        UPDATE pointage
+        SET card = ?,
+            timestamp = ?
         WHERE code = ?
         """
         cursor = self.cursor.execute(
             query,
             (
-                data["nom"],
+                data["card"],
+                data["timestamp"].strftime("%Y-%m-%d %H:%M:%S"),
                 code,
             ),
         )
         self.conn.commit()
-        updated_ligne = cursor.fetchone()
-        return updated_ligne
+        updated_pointage = cursor.fetchone()
+        if updated_pointage:
+            updated_pointage["timestamp"] = datetime.strptime(
+                updated_pointage["timestamp"], "%Y-%m-%d %H:%M:%S"
+            )
+        return updated_pointage
 
     def _delete(self, code: int):
-        query = "DELETE FROM ligne WHERE code=?;"
+        query = "DELETE FROM pointage WHERE code=?;"
         self.cursor.execute(query, (code,))
         self.conn.commit()
 
     def _list(self):
-        query: str = """
-        SELECT code,nom,prix / 100.0 AS prix
-        FROM ligne
+        query = """
+        SELECT *
+        FROM pointage
         """
         cursor = self.cursor.execute(query)
         rows = cursor.fetchall()
@@ -84,11 +99,11 @@ class LigneProtocol:
         return data
 
 
-class Ligne:
+class Pointage:
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.data = {}
-        self.db = LigneProtocol()
+        self.db = PointageProtocol()
 
     def _create(self):
         return self.db._create(self.data)
@@ -105,5 +120,9 @@ class Ligne:
     def _list(self):
         return self.db._list()
 
-    def set_data(self, nom, prix):
-        self.data = {"nom": nom, "prix": prix}
+    def set_data(self, card, timestamp, entring=0):
+        self.data = {
+            "card": card,
+            "timestamp": timestamp,
+            "entring": entring,
+        }

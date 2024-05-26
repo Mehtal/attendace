@@ -36,7 +36,7 @@
         pos_hint:{"center_y":0.5}
         md_bg_color:"green"
         icon: "eye"
-        on_release: app.root.current_screen.detail_supplier(code.text)
+        on_release: app.root.current_screen.facture(code.text)
 
       MDIconButton:
         pos_hint:{"center_y":0.5}
@@ -74,6 +74,7 @@
         orientation: "horizontal"
         adaptive_height: True
         padding:50,10,50,10
+        spacing:10
         pos_hint:{"center_x":0.5}
         pos: (0,id_table_header.pos[1] + id_table_header.height + 50)
 
@@ -85,6 +86,20 @@
           bold:True
           italic:True
           
+        MDRoundFlatIconButton:
+          id: id_toggle_create_button
+          text: "Facture"
+          icon: "plus"
+          bold:True
+          italic:True
+          font_size: 22
+          font_name: "HackNerdFont"
+          text_color: "white"
+          icon_color:"white"
+          line_color: "blue"
+          md_bg_color: "blue"
+          padding:[25,15,25,15]
+          on_release: root.open_facture_modal() 
 
         MDRoundFlatIconButton:
           id: id_toggle_create_button

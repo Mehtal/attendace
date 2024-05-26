@@ -28,7 +28,48 @@
       text: "Cancel"
       on_release: app.root.current_screen.dialog_close()
 
+<FactureForm>:
+  id: id_create_form
+  spacing: 50
+  pos_hint: {"center_x": 0.5, "center_y": 0.5}
+  orientation: "vertical"
+  size_hint: 0.6, None
+  height: self.minimum_height
+  padding: 50
 
+  MDTextField:
+    id: id_fourniseur
+    hint_text: "Select Supplier"
+    text: "" 
+    value : "" if not root.fourniseur  else root.fourniseur["code"]
+    on_focus: root.get_fourniseur_list()
+    required: True
+
+  MDTextField:
+    id: id_start_date
+    hint_text: "Select start date"
+    text: "" 
+    value: " 00:00:00"
+    required: True
+    on_focus: if self.focus: root.show_date_picker(self)
+
+  MDTextField:
+    id: id_end_date
+    hint_text: "Select end date"
+    text: "" 
+    value: " 23:59:59"
+    required: True
+    on_focus: if self.focus: root.show_date_picker(self)
+
+  MDBoxLayout:
+    id: id_btn_list
+    pos_hint: {"right": 1}
+    adaptive_size: True
+    spacing: 30
+
+    MDRectangleFlatButton:
+      text: "Cancel"
+      on_release: app.root.current_screen.dialog_close()
 
 
 

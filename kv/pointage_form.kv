@@ -1,0 +1,41 @@
+#:import Card card.models.Card 
+<PointageForm>:
+  id: id_create_form
+  spacing: 50
+  pos_hint: {"center_x": 0.5, "center_y": 0.5}
+  orientation: "vertical"
+  size_hint: 0.6, None
+  height: self.minimum_height
+  padding: 50
+
+  MDTextField:
+    id: id_card
+    hint_text: "Select card"
+    text: "" if not root.card else root.card["name"]
+    value: "" if not root.card else root.card["code"]
+    on_focus: root.get_card_list(self, Card)
+    required: True
+
+  MDTextField:
+    id: id_date
+    hint_text: "Select date"
+    text: "" if not root.timestamp else root.timestamp.split(' ')[0]
+    required: True
+    on_focus: if self.focus: root.show_date_picker(self)
+
+  MDTextField:
+    id: id_time
+    hint_text: "Select time"
+    text: "" if not root.timestamp else root.timestamp.split(' ')[1]
+    required: True
+    on_focus: if self.focus: root.show_time_picker(self)
+
+  MDBoxLayout:
+    id: id_btn_list
+    pos_hint: {"right": 1}
+    adaptive_size: True
+    spacing: 30
+
+    MDRectangleFlatButton:
+      text: "Cancel"
+      on_release: app.root.current_screen.dialog_close()

@@ -14,6 +14,7 @@ from team import TeamScreen
 from rotation import RotationScreen
 from card import CardScreen
 from horaire import HoraireScreen
+from pointage import PointageScreen
 from components import Sidebar
 
 
@@ -55,6 +56,7 @@ class MainApp(MDApp):
         sm.add_widget(CardScreen(name="card"))
         sm.add_widget(SupplierDetailScreen(name="sup-detail"))
         sm.add_widget(HoraireScreen(name="horaire"))
+        sm.add_widget(PointageScreen(name="pointage"))
         return sm
 
 

@@ -16,6 +16,11 @@
     id : nom
     text: self.parent.nom
     size_hint_x: 2
+  CLabel:
+    id : prix
+    text: self.parent.prix
+    size_hint_x: 2
+
   MDAnchorLayout:
     spacing:10
     size_hint_x:2
@@ -120,6 +125,11 @@
           CLabel:
             color: "white"
             text: "NOM"
+            size_hint_x:2
+            bold:True
+          CLabel:
+            color: "white"
+            text: "PRIX"
             size_hint_x:2
             bold:True
           CLabel:

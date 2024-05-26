@@ -1,0 +1,141 @@
+<PointageDataRow>:
+  bold: True
+  md_bg_color: 1, 1, 1, 1
+  canvas:
+    Color:
+      rgba: (0, 0, 0, 0.8)
+    Line:
+      width: 1 
+      points: (self.x, self.height, self.x, self.y, self.width, self.y, self.width, self.height)
+  CLabel:
+    id: id_code
+    text: str(self.parent.code)
+    adaptive_width: True
+    size_hint_x: 0.5
+  CLabel:
+    id: id_equipe
+    text: "" if not root.team else root.team
+    size_hint_x: 1
+  CLabel:
+    id: id_timestamp
+    text: "" if not root.timestamp else root.timestamp
+    size_hint_x: 2
+  MDAnchorLayout:
+    spacing: 10
+    size_hint_x: 2
+    anchor_x: "center"
+    anchor_y: "center"
+    MDBoxLayout:
+      adaptive_size: True
+      padding: dp(10)
+      spacing: 20
+      MDIconButton:
+        pos_hint: {"center_y": 0.5}
+        md_bg_color: "green"
+        icon: "eye"
+        on_release:
+
+      MDIconButton:
+        pos_hint: {"center_y": 0.5}
+        md_bg_color: "orange"
+        icon: "text-box-edit"
+        on_release: app.root.current_screen.open_modal(id_code.text, update=True)
+      
+      MDIconButton:
+        icon: "delete"
+        pos_hint: {"center_y": 0.5}
+        md_bg_color: "red"
+        on_release: app.root.current_screen.delete_pointage(id_code.text)
+
+
+<PointageScreen>:
+  name: "pointage"
+  id: id_pointage_screen
+  MDBoxLayout:
+    id: id_main_wrapper
+    orientation: "horizontal"
+    Sidebar:
+      id: id_sidebar
+
+    MDFloatLayout:
+      id: id_main_screen
+      md_bg_color: "white"
+
+      MDBoxLayout:
+        id: id_navbar
+        md_bg_color: app.theme_cls.bg_dark
+        size_hint_y: None
+        height: dp(50)
+        pos_hint: {"center_x": 0.5, "top": 1}
+
+      MDBoxLayout:
+        orientation: "horizontal"
+        adaptive_height: True
+        padding: 50, 10, 50, 10
+        pos_hint: {"center_x": 0.5}
+        pos: (0, id_table_header.pos[1] + id_table_header.height + 50)
+
+        MDLabel:
+          color: "black"
+          font_name: "HackNerdFont"
+          text: "POINTAGE SCREEN"
+          font_size: "30"
+          bold: True
+          italic: True
+
+        MDRoundFlatIconButton:
+          id: id_toggle_create_button
+          text: "Pointage"
+          icon: "plus"
+          bold: True
+          italic: True
+          font_size: 22
+          font_name: "HackNerdFont"
+          text_color: "white"
+          icon_color: "white"
+          line_color: "green"
+          md_bg_color: "green"
+          padding: [25, 15, 25, 15]
+          on_release: root.open_modal()
+
+      MDBoxLayout:
+        id: id_list_view
+        orientation: "vertical"
+        padding: 50
+        pos_hint: {"center_x": 0.5}
+        pos: (0, 50)
+        size_hint_y: 0.8
+
+        MDBoxLayout:
+          id: id_table_header
+          size_hint_y: None
+          height: dp(50)
+          orientation: "horizontal"
+          pos_hint: {"top": 1, "center_x": 0.5}
+          md_bg_color: app.theme_cls.bg_dark
+          CLabel:
+            id: id_header_code
+            color: "white"
+            text: "CODE"
+            adaptive_width: True
+            bold: True
+            size_hint_x: 0.5
+          CLabel:
+            color: "white"
+            text: "Card"
+            size_hint_x: 1
+            bold: True
+          CLabel:
+            color: "white"
+            text: "Timestamp"
+            size_hint_x: 2
+            bold: True
+          CLabel:
+            color: "white"
+            text: "ACTIONS"
+            haligne: "left"
+            size_hint_x:2
+            bold:True
+
+        RV:
+          id: id_rv
