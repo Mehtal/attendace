@@ -23,7 +23,6 @@ def calculate_penalty(data, num_retard):
     # retard freéquents et répétitifs
     if num_retard > 4:
         penalty = penalty * 2
-        print(f"retard frequents penalty x 2")
     return Decimal(f"{penalty:.2f}")
 
 

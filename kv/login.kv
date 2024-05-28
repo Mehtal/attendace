@@ -1,0 +1,45 @@
+<LoginScreen>:
+  MDFloatLayout:
+    MDLabel:
+      text: "Login"
+      halign: 'center'
+      font_style: 'H4'
+      pos_hint: {'center_x': 0.5,"center_y": 0.8}
+
+    MDTextField:
+      id: username_field
+      hint_text: "Username"
+      helper_text_mode: "on_focus"
+      size_hint: (0.8, None)
+      height: dp(36)
+      pos_hint: {'center_x': 0.5, 'top': 0.7}
+
+    MDTextField:
+      id: password_field
+      hint_text: "Password"
+      password: True
+      helper_text_mode: "on_focus"
+      size_hint: (0.8, None)
+      height: dp(36)
+      pos_hint: {'center_x': 0.5, 'top': 0.6}
+
+    MDBoxLayout:
+      spacing: 20
+      pos_hint: {'center_x': 0.5, 'top': 0.4}
+      size_hint: (None, None)
+      height : self.minimum_height
+      width : self.minimum_width
+
+      MDRaisedButton:
+        padding: [40,20,40,20]
+        text: "Login"
+        size_hint: (None, None)
+        height: dp(36)
+        on_release: root.login(username_field.text, password_field.text)
+
+      MDRaisedButton:
+        padding: [40,20,40,20]
+        text: "Signup"
+        size_hint: (None, None)
+        height: dp(36)
+        on_release: root.signup(username_field.text, password_field.text)

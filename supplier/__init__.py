@@ -98,7 +98,6 @@ class SupplierScreen(Screen):
 		ORDER BY p.timestamp ASC;
         """
 
-        print(code)
         c = cursor.execute(query, (code, start, end))
         result = c.fetchall()
         formatted_result = []
@@ -120,11 +119,11 @@ class SupplierScreen(Screen):
                 ]
             )
 
-        fourniseur_info = {
-            "nom": result[0][5],
-            "phone": result[0][6],
-            "adresse": result[0][7],
-        }
+            fourniseur_info = {
+                "nom": result[0][5],
+                "phone": result[0][6],
+                "adresse": result[0][7],
+            }
 
         num_retard = 0
         total = 0

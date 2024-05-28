@@ -15,6 +15,7 @@ from rotation import RotationScreen
 from card import CardScreen
 from horaire import HoraireScreen
 from pointage import PointageScreen
+from login import LoginScreen
 from components import Sidebar
 
 
@@ -48,6 +49,7 @@ class MainApp(MDApp):
                 Builder.load_file(file_path)
 
         sm = ScreenManager()
+        sm.add_widget(LoginScreen(name="login"))
         sm.add_widget(SupplierScreen(name="sup"))
         sm.add_widget(TeamScreen(name="team"))
         sm.add_widget(RotationScreen(name="rotation"))

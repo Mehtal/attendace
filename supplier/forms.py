@@ -51,8 +51,6 @@ class FactureForm(MDBoxLayout):
         for row in rows:
             fournisuer_list.append({f"{col}": str(row[col]) for col in row.keys()})
 
-        print(f"FOURNISEUR LIST \n\n\n {fournisuer_list}")
-
         menu_list = [
             {
                 "text": fourniseur["nom"],
