@@ -131,8 +131,7 @@ class SecondScreen(Screen):
             )
 
     def pointage(self, instance):
-        # card = read_qr_code()
-        card = Card()._read("9933200198")["code"]
+        card = read_qr_code()
         timestamp = datetime.now()
         pointage = Pointage()
         pointage.set_data(card, timestamp)
@@ -157,8 +156,7 @@ class ThirdScreen(Screen):
             )
 
     def pointage(self, instance):
-        # card = read_qr_code()
-        card = Card()._read("9933200198")["code"]
+        card = read_qr_code()
         today = datetime.today().strftime("%Y-%m-%d")
         rotation_start = f"{today} {instance.text}"
         timestamp = datetime.now()
