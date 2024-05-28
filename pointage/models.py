@@ -17,6 +17,7 @@ class PointageProtocol:
         card INTEGER NOT NULL,
         timestamp TEXT NOT NULL,
         entring INTEGER DEFAULT 0,
+        rotation_start TEXT ,
         FOREIGN KEY(card) REFERENCES card(code)
         );
         """
@@ -27,8 +28,8 @@ class PointageProtocol:
         try:
             with self.conn:
                 query = """
-                INSERT INTO pointage(card, timestamp,entring)
-                VALUES(?, ?,?)
+                INSERT INTO pointage(card, timestamp,entring,rotation_start)
+                VALUES(?, ?,?,?)
                 """
                 self.cursor.execute(
                     query,
@@ -36,6 +37,7 @@ class PointageProtocol:
                         data["card"],
                         data["timestamp"].strftime("%Y-%m-%d %H:%M:%S"),
                         data["entring"],
+                        data["rotation_start"],
                     ),
                 )
 
@@ -120,9 +122,10 @@ class Pointage:
     def _list(self):
         return self.db._list()
 
-    def set_data(self, card, timestamp, entring=0):
+    def set_data(self, card, timestamp, entring=0, rotation_start=""):
         self.data = {
             "card": card,
             "timestamp": timestamp,
             "entring": entring,
+            "rotation_start": rotation_start,
         }

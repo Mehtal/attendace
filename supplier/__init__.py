@@ -1,5 +1,8 @@
+import os
+import platform
 import sqlite3
 from kivy.properties import ObjectProperty, StringProperty
+from kivy.uix.behaviors.cover import Decimal
 from kivy.uix.screenmanager import Screen
 from kivy.uix.recycleview.views import RecycleDataViewBehavior
 
@@ -7,7 +10,7 @@ from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.button import MDRectangleFlatButton
 from kivymd.uix.dialog import MDDialog
 
-from facture import create_facture
+from facture import create_facture, calculate_penalty
 from supplier.forms import FactureForm, SupplierForm
 from supplier.models import Supplier
 
@@ -37,87 +40,6 @@ class SupplierScreen(Screen):
         self.rv.viewclass = SupplierDataRow
         self.rv.load_data(Supplier)
 
-    def facture(self, code):
-        conn = sqlite3.connect("sqlite.db")
-        cursor = conn.cursor()
-
-        query = """SELECT p.timestamp AS pointage_timestamp,p.card AS card_code,\n
-        e.nom AS equipe_nom,
-        e.code_fourniseur AS fourniseur,
-        f.nom AS fourniseur_nom
-        FROM pointage p \n
-        JOIN card c ON p.card = c.code \n
-        JOIN equipe e ON c.code_equipe = e.code \n
-        JOIN fourniseur f ON e.code_fourniseur = f.code
-        WHERE e.code_fourniseur = ?;
-        """
-        print(code)
-        c = cursor.execute(query, (code,))
-        result = c.fetchall()
-        self.create_pdf(result)
-
-    def facture_with_date(self, code, start, end):
-        conn = sqlite3.connect("sqlite.db")
-        cursor = conn.cursor()
-
-        # query = """SELECT p.timestamp AS pointage_timestamp,p.card AS card_code,\n
-        # e.nom AS equipe_nom,
-        # e.code_fourniseur AS fourniseur,
-        # f.nom AS fourniseur_nom,
-        # f.telephone AS phone,
-        # f.adresse AS adress,
-        # l.prix AS prix
-        # FROM pointage p \n
-        # JOIN card c ON p.card = c.code \n
-        # JOIN equipe e ON c.code_equipe = e.code \n
-        # JOIN fourniseur f ON e.code_fourniseur = f.code
-        # JOIN ligne l ON e.code_ligne = l.code
-        # WHERE e.code_fourniseur = ?
-        # AND p.timestamp BETWEEN ? and ?
-        # GROUPE BY equipe;
-        # """
-        query = """
-        SELECT 
-            f.nom AS fourniseur_nom,
-            e.nom AS equipe_nom,
-            COUNT(DISTINCT DATE(p.timestamp)) AS days_with_timestamps,
-            l.prix AS prix
-        FROM 
-            pointage p 
-        JOIN 
-            card c ON p.card = c.code 
-        JOIN 
-            equipe e ON c.code_equipe = e.code 
-        JOIN 
-            fourniseur f ON e.code_fourniseur = f.code
-        JOIN 
-            ligne l ON e.code_ligne = l.code
-        WHERE 
-            e.code_fourniseur = ?
-            AND p.timestamp BETWEEN ? AND ?
-        GROUP BY 
-            f.nom, e.nom, l.prix;
-        """
-
-        print(code)
-        c = cursor.execute(query, (code, start, end))
-        result = c.fetchall()
-        formatted_result = []
-        for row in result:
-            fourniseur_nom = row[0]
-            equipe_nom = row[1]
-            days_with_timestamps = row[2]
-            prix = row[3]
-            total_price = days_with_timestamps * prix
-
-            formatted_result.append(
-                [fourniseur_nom, equipe_nom, days_with_timestamps, prix, total_price]
-            )
-        self.create_pdf(formatted_result)
-
-    def create_pdf(self, data):
-        create_facture(data)
-
     def delete_supplier(self, id: str) -> None:
         self.supplier._delete(id)
         self.rv.load_data(Supplier)
@@ -142,6 +64,79 @@ class SupplierScreen(Screen):
         self.facture_with_date(fourniseur, start, end)
 
         self.dialog_close()
+
+    def facture_with_date(self, code, start, end):
+        conn = sqlite3.connect("sqlite.db")
+        cursor = conn.cursor()
+        query = """
+        SELECT 
+            d.nom AS chauffeur_nom,
+            e.nom AS equipe_nom,
+			p.rotation_start AS temp_rotation,
+			p.timestamp AS temp_pointage,
+            l.prix / 100.00  AS prix,
+            f.nom AS nom_fourniseur,
+            f.telephone ,
+            f.adresse 
+        FROM 
+            pointage p
+        JOIN 
+            card c ON p.card = c.code 
+        JOIN 
+            equipe e ON c.code_equipe = e.code 
+        JOIN 
+            fourniseur f ON e.code_fourniseur = f.code
+        JOIN 
+            ligne l ON e.code_ligne = l.code
+        JOIN
+            chauffeur d ON e.code_chauffeur = d.code
+        WHERE 
+			p.entring = 1 
+            AND e.code_fourniseur = ?
+            AND DATE(p.timestamp) BETWEEN ? AND ?
+        GROUP BY DATE(p.timestamp)
+		ORDER BY p.timestamp ASC;
+        """
+
+        print(code)
+        c = cursor.execute(query, (code, start, end))
+        result = c.fetchall()
+        formatted_result = []
+        total = 0
+        for row in result:
+            chauffeur_nom = row[0]
+            equipe_nom = row[1]
+            temp_rotation = row[2]
+            temp_pointage = row[3]
+            prix = row[4]
+
+            formatted_result.append(
+                [
+                    chauffeur_nom,
+                    equipe_nom,
+                    temp_rotation,
+                    temp_pointage,
+                    prix,
+                ]
+            )
+
+        fourniseur_info = {
+            "nom": result[0][5],
+            "phone": result[0][6],
+            "adresse": result[0][7],
+        }
+
+        num_retard = 0
+        total = 0
+        for data in formatted_result:
+            penalty = calculate_penalty(data, num_retard)
+            data.append(penalty)
+            prix_jour = Decimal(data[4]) - Decimal(penalty)
+            data.append(prix_jour)
+            total += prix_jour
+            if penalty:
+                num_retard += 1
+        create_facture(fourniseur_info, formatted_result, start, end, total)
 
     def open_modal(self, code: str = "", update: bool = False):
         if not self.dialog:

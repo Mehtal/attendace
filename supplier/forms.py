@@ -4,6 +4,8 @@ from kivymd.uix.menu import MDDropdownMenu
 from kivymd.uix.pickers import MDDatePicker
 from supplier.models import Supplier
 
+import sqlite3
+
 
 class SupplierForm(MDBoxLayout):
     code = StringProperty()
@@ -33,7 +35,24 @@ class FactureForm(MDBoxLayout):
         self.instance.text = value.strftime("%Y-%m-%d") + self.instance.value
 
     def get_fourniseur_list(self):
-        fournisuer_list = Supplier()._list()
+        conn = sqlite3.connect("sqlite.db")
+        conn.row_factory = sqlite3.Row
+        c = conn.cursor()
+        fournisuer_list = []
+        query = """
+            select f.code , f.nom
+            from pointage p 
+            JOIN card c ON p.card = c.code
+            JOIN equipe e ON c.code_equipe = e.code
+            JOIN fourniseur f ON e.code_fourniseur = f.code
+            GROUP BY f.code
+        """
+        rows = c.execute(query).fetchall()
+        for row in rows:
+            fournisuer_list.append({f"{col}": str(row[col]) for col in row.keys()})
+
+        print(f"FOURNISEUR LIST \n\n\n {fournisuer_list}")
+
         menu_list = [
             {
                 "text": fourniseur["nom"],

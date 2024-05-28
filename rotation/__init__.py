@@ -33,7 +33,6 @@ class RotationScreen(Screen):
         self.rv = self.ids.id_rv
         self.rv.viewclass = RotationDataRow
         self.rv.load_data(self.model)
-        print(f"inside rotationdatarow {self.rv.data}")
 
     def open_modal(self, code: str = "", update: bool = False):
         if not self.dialog:
