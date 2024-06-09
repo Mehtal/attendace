@@ -101,6 +101,7 @@ class SupplierScreen(Screen):
         c = cursor.execute(query, (code, start, end))
         result = c.fetchall()
         formatted_result = []
+        fourniseur_info = {}
         total = 0
         for row in result:
             chauffeur_nom = row[0]
