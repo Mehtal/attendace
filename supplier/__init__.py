@@ -100,43 +100,44 @@ class SupplierScreen(Screen):
 
         c = cursor.execute(query, (code, start, end))
         result = c.fetchall()
-        formatted_result = []
-        fourniseur_info = {}
-        total = 0
-        for row in result:
-            chauffeur_nom = row[0]
-            equipe_nom = row[1]
-            temp_rotation = row[2]
-            temp_pointage = row[3]
-            prix = row[4]
+        if len(result) > 0:
+            formatted_result = []
+            fourniseur_info = {}
+            total = 0
+            for row in result:
+                chauffeur_nom = row[0]
+                equipe_nom = row[1]
+                temp_rotation = row[2]
+                temp_pointage = row[3]
+                prix = row[4]
 
-            formatted_result.append(
-                [
-                    chauffeur_nom,
-                    equipe_nom,
-                    temp_rotation,
-                    temp_pointage,
-                    prix,
-                ]
-            )
+                formatted_result.append(
+                    [
+                        chauffeur_nom,
+                        equipe_nom,
+                        temp_rotation,
+                        temp_pointage,
+                        prix,
+                    ]
+                )
 
-            fourniseur_info = {
-                "nom": result[0][5],
-                "phone": result[0][6],
-                "adresse": result[0][7],
-            }
+                fourniseur_info = {
+                    "nom": result[0][5],
+                    "phone": result[0][6],
+                    "adresse": result[0][7],
+                }
 
-        num_retard = 0
-        total = 0
-        for data in formatted_result:
-            penalty = calculate_penalty(data, num_retard)
-            data.append(penalty)
-            prix_jour = Decimal(data[4]) - Decimal(penalty)
-            data.append(prix_jour)
-            total += prix_jour
-            if penalty:
-                num_retard += 1
-        create_facture(fourniseur_info, formatted_result, start, end, total)
+            num_retard = 0
+            total = 0
+            for data in formatted_result:
+                penalty = calculate_penalty(data, num_retard)
+                data.append(penalty)
+                prix_jour = Decimal(data[4]) - Decimal(penalty)
+                data.append(prix_jour)
+                total += prix_jour
+                if penalty:
+                    num_retard += 1
+            create_facture(fourniseur_info, formatted_result, start, end, total)
 
     def open_modal(self, code: str = "", update: bool = False):
         if not self.dialog:
